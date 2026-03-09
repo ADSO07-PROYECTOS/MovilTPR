@@ -1,0 +1,6 @@
+toml
+[versions]
+agp = "8.4.1"
+kotlin = "1.9.23"
+// ... keep other versions as they are
+    

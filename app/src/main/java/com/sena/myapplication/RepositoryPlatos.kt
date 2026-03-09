@@ -1,0 +1,42 @@
+package com.sena.myapplication
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import android.util.Log
+
+class RepositoryPlatos {
+    private val api = RetrofitClient.instance
+
+    fun obtenerPlatosPorCategoria(idCategoria: Int): LiveData<List<Plato>> {
+        val platosLiveData = MutableLiveData<List<Plato>>()
+        hacerLlamada(idCategoria, platosLiveData, intentos = 0)
+        return platosLiveData
+    }
+
+    private fun hacerLlamada(idCategoria: Int, liveData: MutableLiveData<List<Plato>>, intentos: Int) {
+        api.obtenerPlatosPorCategoria(idCategoria).enqueue(object : Callback<List<Plato>> {
+            override fun onResponse(call: Call<List<Plato>>, response: Response<List<Plato>>) {
+                if (response.isSuccessful && response.body() != null) {
+                    Log.d("RepositoryPlatos", "Platos obtenidos: ${response.body()?.size}")
+                    liveData.postValue(response.body()!!)
+                } else {
+                    Log.e("RepositoryPlatos", "Error respuesta: ${response.code()}")
+                    liveData.postValue(emptyList())
+                }
+            }
+
+            override fun onFailure(call: Call<List<Plato>>, t: Throwable) {
+                Log.e("RepositoryPlatos", "Error conexión (intento $intentos): ${t.message}")
+                if (intentos < 2) {
+                    // Reintentar hasta 2 veces si falla por "unexpected end of stream"
+                    hacerLlamada(idCategoria, liveData, intentos + 1)
+                } else {
+                    liveData.postValue(emptyList())
+                }
+            }
+        })
+    }
+}

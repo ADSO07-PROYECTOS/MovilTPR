@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- item_sabor.xml -->
+    <item name="checkSabor"       type="id" />
+    <item name="tvNombreSabor"    type="id" />
+    <item name="btnMenosSabor"    type="id" />
+    <item name="tvCantidadSabor"  type="id" />
+    <item name="btnMasSabor"      type="id" />
+    <!-- item_adicion.xml -->
+    <item name="checkAdicion"     type="id" />
+    <item name="tvNombreAdicion"  type="id" />
+    <item name="tvPrecioAdicion"  type="id" />
+    <item name="btnMenosAdicion"  type="id" />
+    <item name="tvCantidadAdicion" type="id" />
+    <item name="btnMasAdicion"    type="id" />
+</resources>
+

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/app/src/main/res/values/styles.xml">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
+              <option name="originalContent" value="&lt;resources&gt;&#10;    &lt;!-- Estilo de esquinas redondeadas para ShapeableImageView --&gt;&#10;    &lt;style name=&quot;RoundedCornersImage&quot; parent=&quot;ShapeAppearance.Material3.Corner.Medium&quot;&gt;&#10;        &lt;item name=&quot;cornerFamily&quot;&gt;rounded&lt;/item&gt;&#10;        &lt;item name=&quot;cornerSize&quot;&gt;12dp&lt;/item&gt;&#10;    &lt;/style&gt;&#10;&#10;    &lt;!-- Tema por defecto mínimo (evitar conflictos) --&gt;&#10;    &lt;style name=&quot;AppTheme&quot; parent=&quot;Theme.MaterialComponents.DayNight.NoActionBar&quot;&gt;&#10;        &lt;!-- Personalizaciones mínimas --&gt;&#10;    &lt;/style&gt;&#10;&lt;/resources&gt;&#10;" />
+              <option name="updatedContent" value="&lt;resources&gt;&#10;    &lt;!-- Estilo de esquinas redondeadas para ShapeableImageView --&gt;&#10;    &lt;style name=&quot;RoundedCornersImage&quot; parent=&quot;ShapeAppearance.Material3.Corner.Medium&quot;&gt;&#10;        &lt;item name=&quot;cornerFamily&quot;&gt;rounded&lt;/item&gt;&#10;        &lt;item name=&quot;cornerSize&quot;&gt;12dp&lt;/item&gt;&#10;    &lt;/style&gt;&#10;&#10;    &lt;!-- Tema por defecto mínimo (evitar conflictos) --&gt;&#10;    &lt;style name=&quot;AppTheme&quot; parent=&quot;Theme.MaterialComponents.DayNight.NoActionBar&quot;&gt;&#10;        &lt;!-- Personalizaciones mínimas --&gt;&#10;    &lt;/style&gt;&#10;&lt;/resources&gt;&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

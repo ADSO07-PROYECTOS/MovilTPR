@@ -1,0 +1,93 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp">
+
+    <!-- Nombre de la adición -->
+    <TextView
+        android:id="@id/tvNombreAdicion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="#8B1A1A"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnMenosAdicion"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- Botón − -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@id/btnMenosAdicion"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:text="@string/signo_menos"
+        android:textColor="#8B1A1A"
+        android:textSize="18sp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:padding="0dp"
+        app:cornerRadius="16dp"
+        app:strokeColor="#8B1A1A"
+        app:strokeWidth="1.5dp"
+        app:layout_constraintEnd_toStartOf="@id/tvCantidadAdicion"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- Cantidad -->
+    <TextView
+        android:id="@id/tvCantidadAdicion"
+        android:layout_width="28dp"
+        android:layout_height="wrap_content"
+        android:text="@string/adicional_cantidad"
+        android:textAlignment="center"
+        android:textColor="#222222"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/btnMasAdicion"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- Botón + -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@id/btnMasAdicion"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:text="@string/signo_mas"
+        android:textColor="#8B1A1A"
+        android:textSize="18sp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:padding="0dp"
+        app:cornerRadius="16dp"
+        app:strokeColor="#8B1A1A"
+        app:strokeWidth="1.5dp"
+        app:layout_constraintEnd_toStartOf="@id/tvPrecioAdicion"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="8dp" />
+
+    <!-- Precio como botón rojo sólido -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@id/tvPrecioAdicion"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:minWidth="80dp"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:paddingHorizontal="12dp"
+        android:backgroundTint="#8B1A1A"
+        app:cornerRadius="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
