@@ -1,21 +1,23 @@
 package com.sena.myapplication
 
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import android.view.Window
 import android.widget.Button
-import android.widget.Spinner
+import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import com.sena.myapplication.conexion.ReservaRetrofitClient
-import com.sena.myapplication.models.ClienteReserva
-import com.sena.myapplication.models.DatosReserva
-import com.sena.myapplication.models.ReservaRequest
-import com.sena.myapplication.models.ReservaResponse
+import com.sena.myapplication.models.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,171 +25,220 @@ import java.util.Calendar
 
 class ReservaActivity : BaseActivity() {
 
-    private val api = ReservaRetrofitClient.instance
-    private var listaTematicas: List<Tematica> = emptyList()
-    private var tematicaSeleccionadaId: Int = -1
-    private var fechaSeleccionada: String = ""
+  private val api = ReservaRetrofitClient.instance
+  private var listaTematicas: List<TematicaModel> = emptyList()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_reserva)
-        configurarBarraNavegacion()
+  // Variables de Estado de la Reserva
+  private var fechaSeleccionada = ""
+  private var bloqueHoraInt: Int = -1
+  private var bloquePos: Int = -1
 
-        // Vistas
-        val etFecha          = findViewById<TextInputEditText>(R.id.etFecha)
-        val spinnerBloque    = findViewById<Spinner>(R.id.spinnerBloque)
-        val spinnerTematica  = findViewById<Spinner>(R.id.spinnerTematica)
-        val etPersonas       = findViewById<TextInputEditText>(R.id.etPersonas)
-        val spinnerPiso      = findViewById<Spinner>(R.id.spinnerPiso)
-        val spinnerMetodo    = findViewById<Spinner>(R.id.spinnerMetodoPago)
-        val btnVolver        = findViewById<Button>(R.id.btnVolverReserva)
-        val btnReservar      = findViewById<Button>(R.id.btnReservar)
+  private var tematicaSeleccionadaId: Int = -1
+  private var tematicaPos: Int = -1
 
-        // Datos cliente y carrito desde el intent
-        val cliNombre   = intent.getStringExtra("CLI_NOMBRE")   ?: ""
-        val cliCedula   = intent.getStringExtra("CLI_CEDULA")   ?: ""
-        val cliCorreo   = intent.getStringExtra("CLI_CORREO")   ?: ""
-        val cliTelefono = intent.getStringExtra("CLI_TELEFONO") ?: ""
-        val carritoNombre   = intent.getStringExtra("CARRITO_NOMBRE") ?: ""
-        val carritoCantidad = intent.getIntExtra("CARRITO_CANTIDAD", 1)
-        val carritoPrecio   = intent.getDoubleExtra("CARRITO_PRECIO_UNITARIO", 0.0)
+  private var pisoNumInt: Int = -1
+  private var pisoPos: Int = -1
 
-        // Spinner Bloques Horarios (6 a 22)
-        val bloques = (6..22).map { "$it:00" }
-        ArrayAdapter(this, R.layout.item_spinner_tamano, bloques)
-            .also { it.setDropDownViewResource(R.layout.item_spinner_tamano); spinnerBloque.adapter = it }
+  private var metodoPagoStr: String = ""
+  private var metodoPos: Int = -1
 
-        // Spinner Pisos
-        val pisos = listOf("Piso 1", "Piso 2", "Piso 3")
-        ArrayAdapter(this, R.layout.item_spinner_tamano, pisos)
-            .also { it.setDropDownViewResource(R.layout.item_spinner_tamano); spinnerPiso.adapter = it }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_reserva)
+    configurarBarraNavegacion()
 
-        // Spinner Métodos de pago
-        val metodos = listOf("Efectivo", "Transferencia")
-        ArrayAdapter(this, R.layout.item_spinner_tamano, metodos)
-            .also { it.setDropDownViewResource(R.layout.item_spinner_tamano); spinnerMetodo.adapter = it }
+    // Vistas actualizadas a Buttons
+    val btnFecha = findViewById<Button>(R.id.btnFecha)
+    val btnBloque = findViewById<Button>(R.id.btnBloque)
+    val btnTematica = findViewById<Button>(R.id.btnTematica)
+    val btnPiso = findViewById<Button>(R.id.btnPiso)
+    val btnMetodoPago = findViewById<Button>(R.id.btnMetodoPago)
+    val etPersonas = findViewById<TextInputEditText>(R.id.etPersonas)
+    val btnVolver = findViewById<Button>(R.id.btnVolverReserva)
+    val btnReservar = findViewById<Button>(R.id.btnReservar)
 
-        // DatePicker al tocar el campo fecha
-        etFecha.setOnClickListener {
-            val cal = Calendar.getInstance()
-            DatePickerDialog(this, { _, year, month, day ->
-                fechaSeleccionada = "%04d-%02d-%02d".format(year, month + 1, day)
-                etFecha.setText("%02d/%02d/%04d".format(day, month + 1, year))
-            }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show()
-        }
+    // Datos del intent (Se mantienen igual)
+    val cliNombre = intent.getStringExtra("CLI_NOMBRE") ?: ""
+    val cliCedula = intent.getStringExtra("CLI_CEDULA") ?: ""
+    val cliCorreo = intent.getStringExtra("CLI_CORREO") ?: ""
+    val cliTelefono = intent.getStringExtra("CLI_TELEFONO") ?: ""
 
-        // Cargar temáticas del servidor
-        cargarTematicas(spinnerTematica)
+    // Listas de Opciones Fijas
+    val opcionesBloque = (6..22).map { "$it:00" }
+    val opcionesPiso = listOf("Piso 1", "Piso 2", "Piso 3")
+    val opcionesMetodo = listOf("Efectivo", "Transferencia")
 
-        btnVolver.setOnClickListener { finish() }
+    // 1. CALENDARIO
+    btnFecha.setOnClickListener {
+      val mañana = Calendar.getInstance()
+      mañana.add(Calendar.DAY_OF_YEAR, 1)
 
-        btnReservar.setOnClickListener {
-            val personas = etPersonas.text.toString().trim().toIntOrNull() ?: 0
-
-            if (fechaSeleccionada.isEmpty()) {
-                Toast.makeText(this, "Selecciona una fecha", Toast.LENGTH_SHORT).show(); return@setOnClickListener
-            }
-            if (tematicaSeleccionadaId == -1) {
-                Toast.makeText(this, "Selecciona una temática", Toast.LENGTH_SHORT).show(); return@setOnClickListener
-            }
-            if (personas <= 0) {
-                Toast.makeText(this, "Ingresa el número de personas", Toast.LENGTH_SHORT).show(); return@setOnClickListener
-            }
-
-            val bloqueHora = spinnerBloque.selectedItem.toString().replace(":00","").toIntOrNull() ?: 6
-            val pisoNum    = spinnerPiso.selectedItemPosition + 1
-            val metodoPago = if (spinnerMetodo.selectedItemPosition == 1) "transferencia" else "efectivo"
-
-            btnReservar.isEnabled = false
-            btnReservar.text = "Enviando..."
-
-            val body = ReservaRequest(
-              cliente = ClienteReserva(
-                doc = cliCedula,
-                nom = cliNombre,
-                correo = cliCorreo,
-                tel = cliTelefono
-              ),
-              reserva = DatosReserva(
-                fec = fechaSeleccionada,
-                hor = bloqueHora,
-                tematica = tematicaSeleccionadaId,
-                personas = personas,
-                piso = pisoNum,
-                metodoPago = metodoPago
-              ),
-              pedido = listOf() // pedido vacío por ahora
-            )
-
-            var intentosReserva = 0
-
-            fun enviarReserva() {
-                api.crearReserva(body).enqueue(object : Callback<ReservaResponse> {
-                    override fun onResponse(call: Call<ReservaResponse>, response: Response<ReservaResponse>) {
-                        btnReservar.isEnabled = true
-                        btnReservar.text = "RESERVAR"
-                        if (response.isSuccessful && response.body()?.status == "success") {
-                            val qrBase64 = response.body()?.qr ?: ""
-                            val intent = Intent(this@ReservaActivity, ConfirmacionReservaActivity::class.java)
-                            intent.putExtra("QR_BASE64", qrBase64)
-                            startActivity(intent)
-                            finishAffinity()
-                        } else {
-                            val msg = response.body()?.message ?: "Error al crear la reserva"
-                            Toast.makeText(this@ReservaActivity, msg, Toast.LENGTH_LONG).show()
-                            Log.e("ReservaActivity", "Error: ${response.code()} - $msg")
-                        }
-                    }
-                    override fun onFailure(call: Call<ReservaResponse>, t: Throwable) {
-                        Log.e("ReservaActivity", "Fallo reserva (intento $intentosReserva): ${t.message}")
-                        if (intentosReserva < 2) {
-                            intentosReserva++
-                            enviarReserva()
-                        } else {
-                            btnReservar.isEnabled = true
-                            btnReservar.text = "RESERVAR"
-                            Toast.makeText(this@ReservaActivity,
-                                "Error de conexión: ${t.message}", Toast.LENGTH_LONG).show()
-                        }
-                    }
-                })
-            }
-            enviarReserva()
-        }
+      val picker = DatePickerDialog(
+        this, R.style.CalendarioPersonalizado, { _, y, m, d ->
+          val mes = String.format("%02d", m + 1)
+          val dia = String.format("%02d", d)
+          fechaSeleccionada = "$y-$mes-$dia"
+          btnFecha.text = fechaSeleccionada
+        }, mañana.get(Calendar.YEAR), mañana.get(Calendar.MONTH), mañana.get(Calendar.DAY_OF_MONTH)
+      )
+      picker.datePicker.minDate = mañana.timeInMillis
+      picker.show()
     }
 
-    private fun cargarTematicas(spinner: Spinner, intentos: Int = 0) {
-        api.obtenerTematicas().enqueue(object : Callback<List<Tematica>> {
-            override fun onResponse(call: Call<List<Tematica>>, response: Response<List<Tematica>>) {
-                if (response.isSuccessful && response.body() != null) {
-                    listaTematicas = response.body()!!
-                    val nombres = listOf("Selecciona una temática...") + listaTematicas.map { it.nombre }
-                    val adapter = ArrayAdapter(this@ReservaActivity, R.layout.item_spinner_tamano, nombres)
-                    adapter.setDropDownViewResource(R.layout.item_spinner_tamano)
-                    spinner.adapter = adapter
-                    spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(p: AdapterView<*>, v: View?, pos: Int, id: Long) {
-                            tematicaSeleccionadaId = if (pos == 0) -1 else listaTematicas[pos - 1].id
-                        }
-                        override fun onNothingSelected(p: AdapterView<*>) {}
-                    }
-                } else if (intentos < 3) {
-                    cargarTematicas(spinner, intentos + 1)
-                } else {
-                    Toast.makeText(this@ReservaActivity,
-                        "No se pudieron cargar las temáticas", Toast.LENGTH_SHORT).show()
-                }
+    // 2. DIÁLOGOS SELECTORES
+    btnBloque.setOnClickListener {
+      mostrarDialogoSelector("Bloque Horario", opcionesBloque, bloquePos) { pos, texto ->
+        bloquePos = pos
+        bloqueHoraInt = texto.replace(":00", "").toInt()
+        btnBloque.text = texto
+      }
+    }
+
+    btnPiso.setOnClickListener {
+      mostrarDialogoSelector("Seleccionar Piso", opcionesPiso, pisoPos) { pos, texto ->
+        pisoPos = pos
+        pisoNumInt = pos + 1
+        btnPiso.text = texto
+      }
+    }
+
+    btnMetodoPago.setOnClickListener {
+      mostrarDialogoSelector("Método de Pago", opcionesMetodo, metodoPos) { pos, texto ->
+        metodoPos = pos
+        metodoPagoStr = texto.lowercase()
+        btnMetodoPago.text = texto
+      }
+    }
+
+    btnTematica.setOnClickListener {
+      val nombresTematicas = listaTematicas.map { it.nombre }
+      mostrarDialogoSelector("Temática", nombresTematicas, tematicaPos) { pos, texto ->
+        tematicaPos = pos
+        tematicaSeleccionadaId = listaTematicas[pos].id
+        btnTematica.text = texto
+      }
+    }
+
+    // Cargar las temáticas al iniciar
+    cargarTematicas(btnTematica)
+
+    // 3. ENVÍO AL SERVIDOR
+    btnVolver.setOnClickListener { finish() }
+
+    btnReservar.setOnClickListener {
+      val personas = etPersonas.text.toString().trim().toIntOrNull() ?: 0
+
+      // Validaciones Estrictas
+      if (fechaSeleccionada.isEmpty()) { Toast.makeText(this, "Selecciona una fecha", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
+      if (bloqueHoraInt == -1) { Toast.makeText(this, "Selecciona un bloque horario", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
+      if (tematicaSeleccionadaId == -1) { Toast.makeText(this, "Selecciona una temática", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
+      if (personas <= 0) { Toast.makeText(this, "Ingresa el número de personas", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
+      if (pisoNumInt == -1) { Toast.makeText(this, "Selecciona un piso", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
+      if (metodoPagoStr.isEmpty()) { Toast.makeText(this, "Selecciona un método de pago", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
+
+      btnReservar.isEnabled = false
+      btnReservar.text = "Enviando..."
+
+      val body = ReservaRequest(
+        cliente = ClienteReserva(doc = cliCedula, nom = cliNombre, correo = cliCorreo, tel = cliTelefono),
+        reserva = DatosReserva(fec = fechaSeleccionada, hor = bloqueHoraInt, tematica = tematicaSeleccionadaId, personas = personas, piso = pisoNumInt, metodoPago = metodoPagoStr),
+        pedido = listOf()
+      )
+
+      var intentosReserva = 0
+      fun enviarReserva() {
+        api.crearReserva(body).enqueue(object : Callback<ReservaResponse> {
+          override fun onResponse(call: Call<ReservaResponse>, response: Response<ReservaResponse>) {
+            btnReservar.isEnabled = true
+            btnReservar.text = "RESERVAR"
+            if (response.isSuccessful && response.body()?.status == "success") {
+              val intent = Intent(this@ReservaActivity, ConfirmacionReservaActivity::class.java)
+              intent.putExtra("QR_BASE64", response.body()?.qr ?: "")
+              startActivity(intent)
+              finishAffinity()
+            } else {
+              Toast.makeText(this@ReservaActivity, response.body()?.message ?: "Error al crear la reserva", Toast.LENGTH_LONG).show()
             }
-            override fun onFailure(call: Call<List<Tematica>>, t: Throwable) {
-                Log.e("ReservaActivity", "Fallo temáticas (intento $intentos): ${t.message}")
-                if (intentos < 3) {
-                    cargarTematicas(spinner, intentos + 1)
-                } else {
-                    Toast.makeText(this@ReservaActivity,
-                        "Error de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
-                }
+          }
+          override fun onFailure(call: Call<ReservaResponse>, t: Throwable) {
+            if (intentosReserva < 2) {
+              intentosReserva++
+              enviarReserva()
+            } else {
+              btnReservar.isEnabled = true
+              btnReservar.text = "RESERVAR"
+              Toast.makeText(this@ReservaActivity, "Error de red: ${t.message}", Toast.LENGTH_LONG).show()
             }
+          }
         })
+      }
+      enviarReserva()
     }
-}
+  }
 
+  // --- FUNCIONES AUXILIARES ---
+
+  private fun cargarTematicas(btnTematica: Button, intentos: Int = 0) {
+    api.obtenerTematicas().enqueue(object : Callback<List<TematicaModel>> {
+      override fun onResponse(call: Call<List<TematicaModel>>, response: Response<List<TematicaModel>>) {
+        if (response.isSuccessful && response.body() != null) {
+          listaTematicas = response.body()!!
+          btnTematica.text = "Seleccionar Temática"
+          btnTematica.isEnabled = true // Habilitamos el botón ahora que hay datos
+        } else if (intentos < 3) cargarTematicas(btnTematica, intentos + 1)
+      }
+      override fun onFailure(call: Call<List<TematicaModel>>, t: Throwable) {
+        if (intentos < 3) cargarTematicas(btnTematica, intentos + 1)
+        else Toast.makeText(this@ReservaActivity, "Error al cargar temáticas", Toast.LENGTH_SHORT).show()
+      }
+    })
+  }
+
+  // FUNCIÓN GENÉRICA PARA CONSTRUIR LA VENTANA EMERGENTE
+  private fun mostrarDialogoSelector(titulo: String, opciones: List<String>, indiceActual: Int, alSeleccionar: (Int, String) -> Unit) {
+    val dialog = Dialog(this)
+    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+    dialog.setContentView(R.layout.dialog_selector_generico)
+    dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+    dialog.findViewById<TextView>(R.id.tvTituloDialogo).text = titulo
+    val contenedor = dialog.findViewById<LinearLayout>(R.id.contenedorOpciones)
+
+    var indiceTemp = indiceActual
+    val vistasFilas = mutableListOf<View>()
+
+    for (i in opciones.indices) {
+      val vistaFila = LayoutInflater.from(this).inflate(R.layout.item_opcion_dialogo, contenedor, false)
+      val tvTexto = vistaFila.findViewById<TextView>(R.id.tvTextoOpcion)
+      val imgCheck = vistaFila.findViewById<ImageButton>(R.id.imgCheckOpcion)
+
+      tvTexto.text = opciones[i]
+
+      vistaFila.setOnClickListener {
+        indiceTemp = i
+        vistasFilas.forEachIndexed { index, vista ->
+          val img = vista.findViewById<ImageButton>(R.id.imgCheckOpcion)
+          val txt = vista.findViewById<TextView>(R.id.tvTextoOpcion)
+          if (index == indiceTemp) {
+            img.setImageResource(R.drawable.ic_reserva)
+            txt.setTextColor(Color.parseColor("#A0CBFC"))
+          } else {
+            img.setImageResource(R.drawable.ic_mas)
+            txt.setTextColor(Color.parseColor("#CCF5F5F5"))
+          }
+        }
+      }
+      if (i == indiceTemp) vistaFila.performClick() // Autoseleccionar
+
+      contenedor.addView(vistaFila)
+      vistasFilas.add(vistaFila)
+    }
+
+    dialog.findViewById<Button>(R.id.btnCancelarDialogo).setOnClickListener { dialog.dismiss() }
+    dialog.findViewById<Button>(R.id.btnAceptarDialogo).setOnClickListener {
+      if (indiceTemp != -1) alSeleccionar(indiceTemp, opciones[indiceTemp])
+      dialog.dismiss()
+    }
+    dialog.show()
+  }
+}

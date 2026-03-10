@@ -7,6 +7,8 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.sena.myapplication.adapter.PlatoAdapter
+import com.sena.myapplication.models.PlatoModel
 import com.sena.myapplication.models.PlatoViewModel
 
 class VerPlatosActivity : BaseActivity() {
@@ -44,13 +46,13 @@ class VerPlatosActivity : BaseActivity() {
         }
     }
 
-    private fun abrirDetalle(plato: Plato) {
+    private fun abrirDetalle(platoModel: PlatoModel) {
         val intent = Intent(this, PlatoDetalleActivity::class.java).apply {
-            putExtra("ID_PLATO",          plato.id)
-            putExtra("NOMBRE_PLATO",      plato.nombre)
-            putExtra("DESCRIPCION_PLATO", plato.descripcion)
-            putExtra("IMAGEN_PLATO",      plato.imagen)
-            putExtra("PRECIO_PLATO",      plato.precio)
+            putExtra("ID_PLATO",          platoModel.id)
+            putExtra("NOMBRE_PLATO",      platoModel.nombre)
+            putExtra("DESCRIPCION_PLATO", platoModel.descripcion)
+            putExtra("IMAGEN_PLATO",      platoModel.imagen)
+            putExtra("PRECIO_PLATO",      platoModel.precio)
         }
         startActivity(intent)
     }

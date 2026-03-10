@@ -2,10 +2,11 @@ package com.sena.myapplication
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.sena.myapplication.adapter.CategoriaAdapter
+import com.sena.myapplication.models.CategoriaModel
 import com.sena.myapplication.models.CategoriaViewModel
 
 class MenuGeneral : BaseActivity() {
@@ -26,14 +27,14 @@ class MenuGeneral : BaseActivity() {
         viewModel = ViewModelProvider(this).get(CategoriaViewModel::class.java)
 
         adapter = CategoriaAdapter(emptyList()) { categoriaSeleccionada ->
-            abrirPlatosDelaCategoría(categoriaSeleccionada)
+          abrirPlatosDelaCategoría(categoriaSeleccionada)
         }
         recyclerViewCategorias.adapter = adapter
 
         // Observar los cambios en las categorías de forma reactiva
         viewModel.obtenerCategorias().observe(this) { categorias ->
             adapter = CategoriaAdapter(categorias) { categoriaSeleccionada ->
-                abrirPlatosDelaCategoría(categoriaSeleccionada)
+              abrirPlatosDelaCategoría(categoriaSeleccionada)
             }
             recyclerViewCategorias.adapter = adapter
         }
@@ -48,16 +49,16 @@ class MenuGeneral : BaseActivity() {
     private fun recargarCategorias() {
         viewModel.recargarCategorias().observe(this) { categorias ->
             adapter = CategoriaAdapter(categorias) { categoriaSeleccionada ->
-                abrirPlatosDelaCategoría(categoriaSeleccionada)
+              abrirPlatosDelaCategoría(categoriaSeleccionada)
             }
             recyclerViewCategorias.adapter = adapter
         }
     }
 
-    private fun abrirPlatosDelaCategoría(categoriaSeleccionada: Categoria) {
+    private fun abrirPlatosDelaCategoría(categoriaModelSeleccionada: CategoriaModel) {
         val intent = Intent(this@MenuGeneral, VerPlatosActivity::class.java)
-        intent.putExtra("ID_CATEGORIA", categoriaSeleccionada.id)
-        intent.putExtra("NOMBRE_CATEGORIA", categoriaSeleccionada.nombre)
+        intent.putExtra("ID_CATEGORIA", categoriaModelSeleccionada.id)
+        intent.putExtra("NOMBRE_CATEGORIA", categoriaModelSeleccionada.nombre)
         startActivity(intent)
     }
 }

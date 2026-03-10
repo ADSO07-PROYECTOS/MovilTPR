@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="320dp"
+  android:layout_height="wrap_content"
+
+  app:cardCornerRadius="20dp">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/fondo_contenedor_gris"
+    android:padding="24dp">
+
+    <TextView
+      android:id="@+id/tvTituloDialogo"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Seleccionar"
+      android:textAlignment="center"
+      android:textColor="#FFFFFF"
+      android:textSize="22sp"
+      android:textStyle="bold"
+      android:layout_marginBottom="10dp" />
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="#4DFFFFFF"
+      android:layout_marginBottom="15dp"/>
+
+    <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="150dp"
+      android:fadeScrollbars="false">
+      <LinearLayout
+        android:id="@+id/contenedorOpciones"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+    </ScrollView>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:layout_marginTop="20dp"
+      android:weightSum="2">
+
+      <Button
+        android:id="@+id/btnCancelarDialogo"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:backgroundTint="@android:color/transparent"
+        android:text="CANCELAR"
+        android:textColor="#FF383C"
+        android:textStyle="bold" />
+
+      <Button
+        android:id="@+id/btnAceptarDialogo"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:backgroundTint="@android:color/transparent"
+        android:text="ACEPTAR"
+        android:textColor="#117CF4"
+        android:textStyle="bold" />
+    </LinearLayout>
+  </LinearLayout>
+</androidx.cardview.widget.CardView>

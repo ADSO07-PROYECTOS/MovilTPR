@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import android.util.Log
 import com.sena.myapplication.conexion.RetrofitClient
+import com.sena.myapplication.models.AdicionModel
+import com.sena.myapplication.models.ExtrasModel
+import com.sena.myapplication.models.SaborModel
 import com.sena.myapplication.models.TamanoModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -14,12 +17,12 @@ class RepositoryPlatoDetalle {
     private val api = RetrofitClient.instance
 
     private val _tamanos   = MutableLiveData<List<TamanoModel>>()
-    private val _sabores   = MutableLiveData<List<Sabor>>()
-    private val _adiciones = MutableLiveData<List<Adicion>>()
+    private val _sabores   = MutableLiveData<List<SaborModel>>()
+    private val _adiciones = MutableLiveData<List<AdicionModel>>()
 
     val tamanos:   LiveData<List<TamanoModel>>   = _tamanos
-    val sabores:   LiveData<List<Sabor>>    = _sabores
-    val adiciones: LiveData<List<Adicion>>  = _adiciones
+    val sabores:   LiveData<List<SaborModel>>    = _sabores
+    val adiciones: LiveData<List<AdicionModel>>  = _adiciones
 
     /** Una sola llamada carga tamaños, sabores y adiciones desde /api/extras */
     fun cargarExtras() {
@@ -27,8 +30,8 @@ class RepositoryPlatoDetalle {
     }
 
     private fun hacerLlamada(intentos: Int) {
-        api.obtenerExtras().enqueue(object : Callback<Extras> {
-            override fun onResponse(call: Call<Extras>, response: Response<Extras>) {
+        api.obtenerExtras().enqueue(object : Callback<ExtrasModel> {
+            override fun onResponse(call: Call<ExtrasModel>, response: Response<ExtrasModel>) {
                 if (response.isSuccessful && response.body() != null) {
                     val body = response.body()!!
                     _tamanos.postValue(body.tamanoModels)
@@ -45,7 +48,7 @@ class RepositoryPlatoDetalle {
                 }
             }
 
-            override fun onFailure(call: Call<Extras>, t: Throwable) {
+            override fun onFailure(call: Call<ExtrasModel>, t: Throwable) {
                 Log.e("RepoPlatoDetalle", "Fallo conexión extras (intento $intentos): ${t.message}")
                 if (intentos < 2) {
                     hacerLlamada(intentos + 1)

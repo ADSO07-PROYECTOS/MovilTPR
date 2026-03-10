@@ -7,19 +7,20 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.util.Log
 import com.sena.myapplication.conexion.RetrofitClient
+import com.sena.myapplication.models.PlatoModel
 
 class RepositoryPlatos {
     private val api = RetrofitClient.instance
 
-    fun obtenerPlatosPorCategoria(idCategoria: Int): LiveData<List<Plato>> {
-        val platosLiveData = MutableLiveData<List<Plato>>()
+    fun obtenerPlatosPorCategoria(idCategoria: Int): LiveData<List<PlatoModel>> {
+        val platosLiveData = MutableLiveData<List<PlatoModel>>()
         hacerLlamada(idCategoria, platosLiveData, intentos = 0)
         return platosLiveData
     }
 
-    private fun hacerLlamada(idCategoria: Int, liveData: MutableLiveData<List<Plato>>, intentos: Int) {
-        api.obtenerPlatosPorCategoria(idCategoria).enqueue(object : Callback<List<Plato>> {
-            override fun onResponse(call: Call<List<Plato>>, response: Response<List<Plato>>) {
+    private fun hacerLlamada(idCategoria: Int, liveData: MutableLiveData<List<PlatoModel>>, intentos: Int) {
+        api.obtenerPlatosPorCategoria(idCategoria).enqueue(object : Callback<List<PlatoModel>> {
+            override fun onResponse(call: Call<List<PlatoModel>>, response: Response<List<PlatoModel>>) {
                 if (response.isSuccessful && response.body() != null) {
                     Log.d("RepositoryPlatos", "Platos obtenidos: ${response.body()?.size}")
                     liveData.postValue(response.body()!!)
@@ -29,7 +30,7 @@ class RepositoryPlatos {
                 }
             }
 
-            override fun onFailure(call: Call<List<Plato>>, t: Throwable) {
+            override fun onFailure(call: Call<List<PlatoModel>>, t: Throwable) {
                 Log.e("RepositoryPlatos", "Error conexión (intento $intentos): ${t.message}")
                 if (intentos < 2) {
                     // Reintentar hasta 2 veces si falla por "unexpected end of stream"

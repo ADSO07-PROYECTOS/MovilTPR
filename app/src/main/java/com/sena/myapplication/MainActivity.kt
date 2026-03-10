@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.sena.myapplication.adapter.CategoriaAdapter
+import com.sena.myapplication.models.CategoriaModel
 import com.sena.myapplication.models.CategoriaViewModel
 
 class MainActivity : BaseActivity() {
@@ -32,10 +34,10 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun abrirPlatos(categoria: Categoria) {
+    private fun abrirPlatos(categoriaModel: CategoriaModel) {
         val intent = Intent(this, VerPlatosActivity::class.java).apply {
-            putExtra("ID_CATEGORIA", categoria.id)
-            putExtra("NOMBRE_CATEGORIA", categoria.nombre)
+            putExtra("ID_CATEGORIA", categoriaModel.id)
+            putExtra("NOMBRE_CATEGORIA", categoriaModel.nombre)
         }
         startActivity(intent)
     }

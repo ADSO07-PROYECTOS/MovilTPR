@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="55dp"
+  android:gravity="center_vertical"
+  android:clickable="true"
+  android:focusable="true">
+
+  <ImageButton
+    android:id="@+id/imgCheckOpcion"
+    android:layout_width="28dp"
+    android:layout_height="28dp"
+    android:background="@android:color/transparent"
+    android:scaleType="fitCenter"
+    android:clickable="false" />
+
+  <TextView
+    android:id="@+id/tvTextoOpcion"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="15dp"
+    android:textColor="#CCF5F5F5"
+    android:textSize="18sp"/>
+</LinearLayout>

@@ -15,4 +15,11 @@
         <item name="android:windowMinWidthMajor">80%</item>
         <item name="android:windowMinWidthMinor">80%</item>
     </style>
+    <style name="CalendarioPersonalizado" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+      <item name="colorAccent">#555555</item>
+      <item name="android:windowBackground">@android:color/transparent</item>
+      <item name="android:background">#333333</item>
+      <item name="android:textColorPrimary">#FFFFFF</item>
+      <item name="android:textColorSecondary">#555555</item>
+    </style>
 </resources>

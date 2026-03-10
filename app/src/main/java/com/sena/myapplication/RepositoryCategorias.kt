@@ -13,6 +13,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.sena.myapplication.conexion.RetrofitClient
+import com.sena.myapplication.models.CategoriaModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,8 +33,8 @@ class RepositoryCategorias {
      * Solicita la lista de categorías al servidor.
      * @return LiveData con la lista de categorías observada desde el ViewModel.
      */
-    fun obtenerCategorias(): LiveData<List<Categoria>> {
-        val liveData = MutableLiveData<List<Categoria>>()
+    fun obtenerCategorias(): LiveData<List<CategoriaModel>> {
+        val liveData = MutableLiveData<List<CategoriaModel>>()
         hacerLlamada(liveData, intentos = 0)
         return liveData
     }
@@ -43,12 +44,12 @@ class RepositoryCategorias {
     // ------------------------------------------------------------------
 
     /** Realiza la llamada HTTP con lógica de reintentos. */
-    private fun hacerLlamada(liveData: MutableLiveData<List<Categoria>>, intentos: Int) {
-        api.obtenerCategorias().enqueue(object : Callback<List<Categoria>> {
+    private fun hacerLlamada(liveData: MutableLiveData<List<CategoriaModel>>, intentos: Int) {
+        api.obtenerCategorias().enqueue(object : Callback<List<CategoriaModel>> {
 
             override fun onResponse(
-                call: Call<List<Categoria>>,
-                response: Response<List<Categoria>>
+              call: Call<List<CategoriaModel>>,
+              response: Response<List<CategoriaModel>>
             ) {
                 if (response.isSuccessful && response.body() != null) {
                     Log.d("RepoCategorias", "Categorías cargadas: ${response.body()!!.size}")
@@ -59,7 +60,7 @@ class RepositoryCategorias {
                 }
             }
 
-            override fun onFailure(call: Call<List<Categoria>>, t: Throwable) {
+            override fun onFailure(call: Call<List<CategoriaModel>>, t: Throwable) {
                 Log.e("RepoCategorias", "Fallo red (intento $intentos): ${t.message}")
                 if (intentos < 2) {
                     hacerLlamada(liveData, intentos + 1)
