@@ -3,6 +3,8 @@ package com.sena.myapplication
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import android.util.Log
+import com.sena.myapplication.conexion.RetrofitClient
+import com.sena.myapplication.models.TamanoModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -11,11 +13,11 @@ class RepositoryPlatoDetalle {
 
     private val api = RetrofitClient.instance
 
-    private val _tamanos   = MutableLiveData<List<Tamano>>()
+    private val _tamanos   = MutableLiveData<List<TamanoModel>>()
     private val _sabores   = MutableLiveData<List<Sabor>>()
     private val _adiciones = MutableLiveData<List<Adicion>>()
 
-    val tamanos:   LiveData<List<Tamano>>   = _tamanos
+    val tamanos:   LiveData<List<TamanoModel>>   = _tamanos
     val sabores:   LiveData<List<Sabor>>    = _sabores
     val adiciones: LiveData<List<Adicion>>  = _adiciones
 
@@ -29,11 +31,11 @@ class RepositoryPlatoDetalle {
             override fun onResponse(call: Call<Extras>, response: Response<Extras>) {
                 if (response.isSuccessful && response.body() != null) {
                     val body = response.body()!!
-                    _tamanos.postValue(body.tamanos)
+                    _tamanos.postValue(body.tamanoModels)
                     _sabores.postValue(body.sabores)
                     _adiciones.postValue(body.adiciones)
                     Log.d("RepoPlatoDetalle",
-                        "Extras cargados → tamaños:${body.tamanos.size} " +
+                        "Extras cargados → tamaños:${body.tamanoModels.size} " +
                         "sabores:${body.sabores.size} adiciones:${body.adiciones.size}")
                 } else {
                     Log.e("RepoPlatoDetalle", "Error /api/extras: ${response.code()}")

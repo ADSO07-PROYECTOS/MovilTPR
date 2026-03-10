@@ -6,6 +6,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import android.util.Log
+import com.sena.myapplication.conexion.RetrofitClient
 
 class RepositoryPlatos {
     private val api = RetrofitClient.instance

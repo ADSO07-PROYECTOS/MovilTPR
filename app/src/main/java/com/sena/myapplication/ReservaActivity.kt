@@ -11,6 +11,11 @@ import android.widget.Button
 import android.widget.Spinner
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
+import com.sena.myapplication.conexion.ReservaRetrofitClient
+import com.sena.myapplication.models.ClienteReserva
+import com.sena.myapplication.models.DatosReserva
+import com.sena.myapplication.models.ReservaRequest
+import com.sena.myapplication.models.ReservaResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -97,21 +102,21 @@ class ReservaActivity : BaseActivity() {
             btnReservar.text = "Enviando..."
 
             val body = ReservaRequest(
-                cliente = ClienteReserva(
-                    doc    = cliCedula,
-                    nom    = cliNombre,
-                    correo = cliCorreo,
-                    tel    = cliTelefono
-                ),
-                reserva = DatosReserva(
-                    fec        = fechaSeleccionada,
-                    hor        = bloqueHora,
-                    tematica   = tematicaSeleccionadaId,
-                    personas   = personas,
-                    piso       = pisoNum,
-                    metodoPago = metodoPago
-                ),
-                pedido = listOf() // pedido vacío por ahora
+              cliente = ClienteReserva(
+                doc = cliCedula,
+                nom = cliNombre,
+                correo = cliCorreo,
+                tel = cliTelefono
+              ),
+              reserva = DatosReserva(
+                fec = fechaSeleccionada,
+                hor = bloqueHora,
+                tematica = tematicaSeleccionadaId,
+                personas = personas,
+                piso = pisoNum,
+                metodoPago = metodoPago
+              ),
+              pedido = listOf() // pedido vacío por ahora
             )
 
             var intentosReserva = 0

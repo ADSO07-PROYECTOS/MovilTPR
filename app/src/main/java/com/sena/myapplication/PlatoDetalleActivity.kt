@@ -13,9 +13,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
+import com.sena.myapplication.models.PlatoDetalleViewModel
+import com.sena.myapplication.models.TamanoModel
 
 class PlatoDetalleActivity : BaseActivity() {
-
     private lateinit var tvNombrePlato: TextView
     private lateinit var imgPlato: ImageView
     private lateinit var tvDescripcionPlato: TextView
@@ -31,7 +32,7 @@ class PlatoDetalleActivity : BaseActivity() {
 
     private lateinit var viewModel: PlatoDetalleViewModel
 
-    private var listaTamanos: List<Tamano> = emptyList()
+    private var listaTamanoModels: List<TamanoModel> = emptyList()
     private var precioTamanoSeleccionado: Double = 0.0
     private var precioAdicionesTotal: Double = 0.0
     private var cantidad: Int = 1
@@ -93,7 +94,7 @@ class PlatoDetalleActivity : BaseActivity() {
         }
 
         btnAnadir.setOnClickListener {
-            val tamanoNombre = if (listaTamanos.isNotEmpty())
+            val tamanoNombre = if (listaTamanoModels.isNotEmpty())
                 btnSeleccionarTamano.text.toString()
             else ""
 
@@ -109,7 +110,7 @@ class PlatoDetalleActivity : BaseActivity() {
 
         // Listener del botón de tamaño siempre activo
         btnSeleccionarTamano.setOnClickListener {
-            if (listaTamanos.isEmpty()) {
+            if (listaTamanoModels.isEmpty()) {
                 // Reintentar cargar extras si aún no llegaron
                 viewModel.cargarExtras()
                 Toast.makeText(this, "Cargando tamaños...", Toast.LENGTH_SHORT).show()
@@ -124,7 +125,7 @@ class PlatoDetalleActivity : BaseActivity() {
     private fun cargarTamanos() {
         viewModel.tamanos.observe(this) { tamanos ->
             if (tamanos.isEmpty()) return@observe
-            listaTamanos = tamanos
+            listaTamanoModels = tamanos
             // Seleccionar el primer tamaño por defecto
             precioTamanoSeleccionado = tamanos[0].precio
             btnSeleccionarTamano.text = tamanos[0].nombre
@@ -133,8 +134,8 @@ class PlatoDetalleActivity : BaseActivity() {
     }
 
     private fun mostrarDialogoTamanos() {
-        val opciones = listaTamanos.map { "${it.nombre}  —  $${"%,.0f".format(it.precio)}" }.toTypedArray()
-        var seleccionado = listaTamanos.indexOfFirst { it.precio == precioTamanoSeleccionado }.takeIf { it >= 0 } ?: 0
+        val opciones = listaTamanoModels.map { "${it.nombre}  —  $${"%,.0f".format(it.precio)}" }.toTypedArray()
+        var seleccionado = listaTamanoModels.indexOfFirst { it.precio == precioTamanoSeleccionado }.takeIf { it >= 0 } ?: 0
 
         AlertDialog.Builder(this, R.style.DialogTamano)
             .setTitle("Selecciona el tamaño")
@@ -142,7 +143,7 @@ class PlatoDetalleActivity : BaseActivity() {
                 seleccionado = which
             }
             .setPositiveButton("Aceptar") { _, _ ->
-                val tamanoElegido = listaTamanos[seleccionado]
+                val tamanoElegido = listaTamanoModels[seleccionado]
                 precioTamanoSeleccionado = tamanoElegido.precio
                 btnSeleccionarTamano.text = tamanoElegido.nombre
                 actualizarPrecioTotal()
