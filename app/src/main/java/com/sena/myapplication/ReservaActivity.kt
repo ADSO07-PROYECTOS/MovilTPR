@@ -30,7 +30,7 @@ class ReservaActivity : BaseActivity() {
 
   // Variables de Estado de la Reserva
   private var fechaSeleccionada = ""
-  private var bloqueHoraInt: Int = -1
+  private var bloqueHoraStr: String = ""
   private var bloquePos: Int = -1
 
   private var tematicaSeleccionadaId: Int = -1
@@ -63,6 +63,11 @@ class ReservaActivity : BaseActivity() {
     val cliCorreo = intent.getStringExtra("CLI_CORREO") ?: ""
     val cliTelefono = intent.getStringExtra("CLI_TELEFONO") ?: ""
 
+    // Datos del carrito (pedido)
+    val carritoIdPlato  = intent.getIntExtra("CARRITO_ID_PLATO", -1)
+    val carritoCantidad = intent.getIntExtra("CARRITO_CANTIDAD", 1)
+    val carritoPrecio   = intent.getDoubleExtra("CARRITO_PRECIO_UNITARIO", 0.0)
+
     // Listas de Opciones Fijas
     val opcionesBloque = (6..22).map { "$it:00" }
     val opcionesPiso = listOf("Piso 1", "Piso 2", "Piso 3")
@@ -89,7 +94,7 @@ class ReservaActivity : BaseActivity() {
     btnBloque.setOnClickListener {
       mostrarDialogoSelector("Bloque Horario", opcionesBloque, bloquePos) { pos, texto ->
         bloquePos = pos
-        bloqueHoraInt = texto.replace(":00", "").toInt()
+        bloqueHoraStr = texto.replace(":00", "")
         btnBloque.text = texto
       }
     }
@@ -130,7 +135,7 @@ class ReservaActivity : BaseActivity() {
 
       // Validaciones Estrictas
       if (fechaSeleccionada.isEmpty()) { Toast.makeText(this, "Selecciona una fecha", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
-      if (bloqueHoraInt == -1) { Toast.makeText(this, "Selecciona un bloque horario", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
+      if (bloqueHoraStr.isEmpty()) { Toast.makeText(this, "Selecciona un bloque horario", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
       if (tematicaSeleccionadaId == -1) { Toast.makeText(this, "Selecciona una temática", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
       if (personas <= 0) { Toast.makeText(this, "Ingresa el número de personas", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
       if (pisoNumInt == -1) { Toast.makeText(this, "Selecciona un piso", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
@@ -141,9 +146,11 @@ class ReservaActivity : BaseActivity() {
 
       val body = ReservaRequest(
         cliente = ClienteReserva(doc = cliCedula, nom = cliNombre, correo = cliCorreo, tel = cliTelefono),
-        reserva = DatosReserva(fec = fechaSeleccionada, hor = bloqueHoraInt, tematica = tematicaSeleccionadaId, personas = personas, piso = pisoNumInt, metodoPago = metodoPagoStr),
-        pedido = listOf()
+        reserva = DatosReserva(fec = fechaSeleccionada, hor = bloqueHoraStr, tematica = tematicaSeleccionadaId, personas = personas, piso = pisoNumInt, metodoPago = metodoPagoStr),
+        pedido = if (carritoIdPlato != -1) listOf(PedidoItem(id = carritoIdPlato, cantidad = carritoCantidad, precio = carritoPrecio)) else listOf()
       )
+
+      Log.d("ReservaActivity", "Enviando reserva: cliente=${body.cliente}, reserva=${body.reserva}, pedido=${body.pedido}")
 
       var intentosReserva = 0
       fun enviarReserva() {
@@ -151,16 +158,26 @@ class ReservaActivity : BaseActivity() {
           override fun onResponse(call: Call<ReservaResponse>, response: Response<ReservaResponse>) {
             btnReservar.isEnabled = true
             btnReservar.text = "RESERVAR"
+            Log.d("ReservaActivity", "Response code: ${response.code()}")
+            Log.d("ReservaActivity", "Response body: ${response.body()}")
+
             if (response.isSuccessful && response.body()?.status == "success") {
               val intent = Intent(this@ReservaActivity, ConfirmacionReservaActivity::class.java)
               intent.putExtra("QR_BASE64", response.body()?.qr ?: "")
               startActivity(intent)
               finishAffinity()
             } else {
-              Toast.makeText(this@ReservaActivity, response.body()?.message ?: "Error al crear la reserva", Toast.LENGTH_LONG).show()
+              val errorBodyStr = try { response.errorBody()?.string() } catch (_: Exception) { null }
+              Log.e("ReservaActivity", "Error body: $errorBodyStr")
+
+              val mensajeError = response.body()?.message
+                ?: errorBodyStr
+                ?: "Error al crear la reserva (código ${response.code()})"
+              Toast.makeText(this@ReservaActivity, mensajeError, Toast.LENGTH_LONG).show()
             }
           }
           override fun onFailure(call: Call<ReservaResponse>, t: Throwable) {
+            Log.e("ReservaActivity", "onFailure: ${t.message}", t)
             if (intentosReserva < 2) {
               intentosReserva++
               enviarReserva()

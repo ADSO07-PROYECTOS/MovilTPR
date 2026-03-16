@@ -21,6 +21,8 @@ class PlatoDetalleActivity : BaseActivity() {
     private lateinit var imgPlato: ImageView
     private lateinit var tvDescripcionPlato: TextView
     private lateinit var btnSeleccionarTamano: MaterialButton
+    private lateinit var tvPrecioTamano: TextView
+    private lateinit var contenedorSabores: LinearLayout
     private lateinit var layoutSabores: LinearLayout
     private lateinit var layoutAdiciones: LinearLayout
     private lateinit var btnAtras: ImageButton
@@ -33,6 +35,7 @@ class PlatoDetalleActivity : BaseActivity() {
     private lateinit var viewModel: PlatoDetalleViewModel
 
     private var listaTamanoModels: List<TamanoModel> = emptyList()
+    private var tamanoSeleccionado: TamanoModel? = null
     private var precioTamanoSeleccionado: Double = 0.0
     private var precioAdicionesTotal: Double = 0.0
     private var cantidad: Int = 1
@@ -47,6 +50,8 @@ class PlatoDetalleActivity : BaseActivity() {
         imgPlato              = findViewById(R.id.imgPlato)
         tvDescripcionPlato    = findViewById(R.id.tvDescripcionPlato)
         btnSeleccionarTamano  = findViewById(R.id.btnSeleccionarTamano)
+        tvPrecioTamano        = findViewById(R.id.tvPrecioTamano)
+        contenedorSabores     = findViewById(R.id.contenedorSabores)
         layoutSabores         = findViewById(R.id.layoutSabores)
         layoutAdiciones    = findViewById(R.id.layoutAdiciones)
         btnAtras           = findViewById(R.id.btnAtras)
@@ -60,6 +65,10 @@ class PlatoDetalleActivity : BaseActivity() {
         val nombrePlato = intent.getStringExtra("NOMBRE_PLATO") ?: ""
         val descripcion = intent.getStringExtra("DESCRIPCION_PLATO") ?: ""
         val imagenUrl   = intent.getStringExtra("IMAGEN_PLATO") ?: ""
+
+        // Construir URL completa si solo viene el nombre del archivo
+        val imagenCompleta = if (imagenUrl.startsWith("http")) imagenUrl
+                             else "http://147.182.238.195:5000/static/img/$imagenUrl"
         val precioBase  = intent.getDoubleExtra("PRECIO_PLATO", 0.0)
 
         tvNombrePlato.text       = nombrePlato
@@ -68,7 +77,7 @@ class PlatoDetalleActivity : BaseActivity() {
         actualizarPrecioTotal()
 
         Glide.with(this)
-            .load(imagenUrl)
+            .load(imagenCompleta)
             .placeholder(R.drawable.plato1)
             .error(R.drawable.plato1)
             .into(imgPlato)
@@ -99,6 +108,7 @@ class PlatoDetalleActivity : BaseActivity() {
             else ""
 
             val intent = Intent(this, CarritoActivity::class.java).apply {
+                putExtra("CARRITO_ID_PLATO",        idPlato)
                 putExtra("CARRITO_NOMBRE",          nombrePlato)
                 putExtra("CARRITO_TAMANO",          tamanoNombre)
                 putExtra("CARRITO_CANTIDAD",        cantidad)
@@ -127,15 +137,28 @@ class PlatoDetalleActivity : BaseActivity() {
             if (tamanos.isEmpty()) return@observe
             listaTamanoModels = tamanos
             // Seleccionar el primer tamaño por defecto
-            precioTamanoSeleccionado = tamanos[0].precio
-            btnSeleccionarTamano.text = tamanos[0].nombre
-            actualizarPrecioTotal()
+            seleccionarTamano(tamanos[0])
+        }
+    }
+
+    private fun seleccionarTamano(tamano: TamanoModel) {
+        tamanoSeleccionado = tamano
+        precioTamanoSeleccionado = tamano.precio
+        btnSeleccionarTamano.text = tamano.nombre
+        tvPrecioTamano.text = getString(R.string.precio_total_label, tamano.precio.toInt())
+        actualizarPrecioTotal()
+
+        // Mostrar sabores solo si el tamaño permite más de 1
+        if (tamano.limiteSabores > 1) {
+            contenedorSabores.visibility = android.view.View.VISIBLE
+        } else {
+            contenedorSabores.visibility = android.view.View.GONE
         }
     }
 
     private fun mostrarDialogoTamanos() {
         val opciones = listaTamanoModels.map { "${it.nombre}  —  $${"%,.0f".format(it.precio)}" }.toTypedArray()
-        var seleccionado = listaTamanoModels.indexOfFirst { it.precio == precioTamanoSeleccionado }.takeIf { it >= 0 } ?: 0
+        var seleccionado = listaTamanoModels.indexOfFirst { it.id == tamanoSeleccionado?.id }.takeIf { it >= 0 } ?: 0
 
         AlertDialog.Builder(this, R.style.DialogTamano)
             .setTitle("Selecciona el tamaño")
@@ -143,10 +166,7 @@ class PlatoDetalleActivity : BaseActivity() {
                 seleccionado = which
             }
             .setPositiveButton("Aceptar") { _, _ ->
-                val tamanoElegido = listaTamanoModels[seleccionado]
-                precioTamanoSeleccionado = tamanoElegido.precio
-                btnSeleccionarTamano.text = tamanoElegido.nombre
-                actualizarPrecioTotal()
+                seleccionarTamano(listaTamanoModels[seleccionado])
             }
             .setNegativeButton("Cancelar", null)
             .show()

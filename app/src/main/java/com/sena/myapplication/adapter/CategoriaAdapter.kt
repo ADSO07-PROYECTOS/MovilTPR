@@ -33,7 +33,7 @@ class CategoriaAdapter(
         holder.tvTamanoCategoria.text = categoria.tamano
 
 
-        val urlImagen = "http://147.182.238.195:5001/static/img/${categoria.imagen}"
+        val urlImagen = "http://147.182.238.195:5000/static/img/${categoria.imagen}"
         Log.d("CategoriaAdapter", "Cargando imagen para '${categoria.nombre}': $urlImagen")
 
         Glide.with(holder.itemView.context)

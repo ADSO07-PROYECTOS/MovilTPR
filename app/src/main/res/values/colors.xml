@@ -2,7 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-   <color name="fondo_difuminado">#CC1A1A1B</color>
+    <color name="fondo_difuminado">#CC1A1A1B</color>
 
-
+    <!-- Paleta roja del restaurante -->
+    <color name="rojo_primario">#A51D21</color>
+    <color name="rojo_oscuro">#8B1A1A</color>
+    <color name="rojo_claro">#D32F2F</color>
+    <color name="blanco">#FFFFFF</color>
+    <color name="gris_claro">#E0E0E0</color>
 </resources>

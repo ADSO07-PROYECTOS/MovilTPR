@@ -24,7 +24,7 @@ data class ClienteReserva(
 /** Datos específicos de la reserva (fecha, hora, piso, etc.). */
 data class DatosReserva(
     @SerializedName("fec")         val fec: String,
-    @SerializedName("hor")         val hor: Int,
+    @SerializedName("hor")         val hor: String,
     @SerializedName("tematica")    val tematica: Int,
     @SerializedName("personas")    val personas: Int,
     @SerializedName("piso")        val piso: Int,
@@ -44,8 +44,8 @@ data class PedidoItem(
 
 /** Respuesta del servidor tras crear la reserva. */
 data class ReservaResponse(
-    @SerializedName("status")  val status: String,
-    @SerializedName("message") val message: String,
+    @SerializedName("status")  val status: String?,
+    @SerializedName("message") val message: String?,
     @SerializedName("qr")      val qr: String?,   // Imagen QR en base64
     @SerializedName("id")      val id: Int?
 )

@@ -87,28 +87,43 @@
                     android:textColor="#FFFFFF"
                     android:textSize="12sp" />
 
-                <!-- Tamaños: botón que abre ventana emergente -->
-                <TextView
+                <!-- Tamaño y Precio en horizontal -->
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
-                    android:text="@string/size_button"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    android:textSize="14sp" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSeleccionarTamano"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/seleccionar_tamano"
-                    android:textColor="#FFFFFF"
-                    app:strokeColor="#FFFFFF"
-                    app:iconGravity="end"
-                    app:icon="@drawable/ic_dropdown"
-                    app:iconTint="#FFFFFF" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSeleccionarTamano"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="44dp"
+                        android:text="@string/seleccionar_tamano"
+                        android:textColor="#8B1A1A"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:backgroundTint="#FFFFFF"
+                        app:strokeColor="#8B1A1A"
+                        app:cornerRadius="22dp"
+                        app:iconGravity="end"
+                        app:icon="@drawable/ic_dropdown"
+                        app:iconTint="#8B1A1A" />
+
+                    <TextView
+                        android:id="@+id/tvPrecioTamano"
+                        android:layout_width="wrap_content"
+                        android:layout_height="44dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/borde_rojo_blanco"
+                        android:gravity="center"
+                        android:paddingHorizontal="20dp"
+                        android:text="@string/price_placeholder"
+                        android:textColor="#8B1A1A"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
                 <!-- Adiciones -->
                 <TextView
@@ -140,41 +155,49 @@
                     android:background="@drawable/borde_rojo_blanco"
                     android:orientation="vertical" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="15dp"
-                    android:background="#FFFFFF" />
-
-                <!-- Sabores -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/ask_sabores"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    android:textSize="13sp"
-                    android:gravity="center"
-                    android:layout_gravity="center_horizontal" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="@string/sabores_note"
-                    android:textColor="#FFFFFF"
-                    android:textSize="11sp"
-                    android:gravity="center"
-                    android:layout_gravity="center_horizontal" />
-
+                <!-- Sabores (solo visible si el tamaño permite más de 1 sabor) -->
                 <LinearLayout
-                    android:id="@+id/layoutSabores"
+                    android:id="@+id/contenedorSabores"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/borde_rojo_blanco"
-                    android:orientation="vertical" />
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="#FFFFFF" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ask_sabores"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:textSize="13sp"
+                        android:gravity="center"
+                        android:layout_gravity="center_horizontal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/sabores_note"
+                        android:textColor="#FFFFFF"
+                        android:textSize="11sp"
+                        android:gravity="center"
+                        android:layout_gravity="center_horizontal" />
+
+                    <LinearLayout
+                        android:id="@+id/layoutSabores"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/borde_rojo_blanco"
+                        android:orientation="vertical" />
+                </LinearLayout>
 
             </LinearLayout>
         </ScrollView>

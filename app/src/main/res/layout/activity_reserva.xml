@@ -6,7 +6,6 @@
     android:background="@drawable/tu_fondo_difuminado"
     android:orientation="vertical"
     android:gravity="center">
-
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,18 +13,14 @@
         app:cardBackgroundColor="#CC1A1A1A"
         app:cardCornerRadius="16dp"
         app:cardElevation="8dp">
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="24dp">
-
-                <!-- Título -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -35,8 +30,6 @@
                     android:textStyle="bold"
                     android:gravity="center"
                     android:layout_marginBottom="20dp" />
-
-                <!-- Fecha -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -44,15 +37,14 @@
                     android:textColor="#FFFFFF"
                     android:textSize="13sp"
                     android:layout_marginBottom="4dp" />
-
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="#FFFFFF"
+                    app:boxStrokeColor="@color/text_input_stroke_color"
+                    app:hintTextColor="@color/rojo_primario"
                     app:boxBackgroundColor="#33FFFFFF">
-
                   <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnFecha"
                     android:layout_width="match_parent"
@@ -63,11 +55,7 @@
                     android:background="@drawable/borde_spinner_oscuro"
                     android:textColorHint="#FFFFFF"
                     android:textSize="13sp"/>
-
-
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Bloque Horario -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -75,7 +63,6 @@
                     android:textColor="#FFFFFF"
                     android:textSize="13sp"
                     android:layout_marginBottom="4dp" />
-
               <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnBloque"
                 android:layout_width="match_parent"
@@ -87,16 +74,13 @@
                 android:gravity="center_vertical|start"
                 android:paddingHorizontal="15dp"
                 android:textAllCaps="false"/>
-
-                <!-- Temática -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Temática"
+                    android:text="Tematica"
                     android:textColor="#FFFFFF"
                     android:textSize="13sp"
                     android:layout_marginBottom="4dp" />
-
               <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnTematica"
                 android:layout_width="match_parent"
@@ -104,14 +88,11 @@
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/borde_spinner_oscuro"
                 android:textColor="#FFFFFF"
-                android:text="Cargando temáticas..."
+                android:text="Cargando tematicas..."
                 android:gravity="center_vertical|start"
                 android:paddingHorizontal="15dp"
                 android:textAllCaps="false"
                 android:enabled="false"/>
-
-
-                <!-- Personas -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -119,15 +100,14 @@
                     android:textColor="#FFFFFF"
                     android:textSize="13sp"
                     android:layout_marginBottom="4dp" />
-
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="#FFFFFF"
+                    app:boxStrokeColor="@color/text_input_stroke_color"
+                    app:hintTextColor="@color/rojo_primario"
                     app:boxBackgroundColor="#33FFFFFF">
-
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etPersonas"
                         android:layout_width="match_parent"
@@ -138,8 +118,6 @@
                         android:textColorHint="#FFFFFF"
                         android:inputType="number" />
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Piso -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -147,7 +125,6 @@
                     android:textColor="#FFFFFF"
                     android:textSize="13sp"
                     android:layout_marginBottom="4dp" />
-
                 <androidx.appcompat.widget.AppCompatButton
                   android:id="@+id/btnPiso"
                   android:layout_width="match_parent"
@@ -159,8 +136,6 @@
                   android:gravity="center_vertical|start"
                   android:paddingHorizontal="15dp"
                   android:textAllCaps="false"/>
-
-                <!-- Método de pago -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -168,7 +143,6 @@
                     android:textColor="#FFFFFF"
                     android:textSize="13sp"
                     android:layout_marginBottom="4dp" />
-
                 <androidx.appcompat.widget.AppCompatButton
                   android:id="@+id/btnMetodoPago"
                   android:layout_width="match_parent"
@@ -176,18 +150,15 @@
                   android:layout_marginBottom="24dp"
                   android:background="@drawable/borde_spinner_oscuro"
                   android:textColor="#FFFFFF"
-                  android:text="Seleccionar Método"
+                  android:text="Seleccionar Metodo"
                   android:gravity="center_vertical|start"
                   android:paddingHorizontal="15dp"
                   android:textAllCaps="false"/>
-
-                <!-- Botones -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:weightSum="2">
-
                     <Button
                         android:id="@+id/btnVolverReserva"
                         android:layout_width="0dp"
@@ -199,7 +170,6 @@
                         android:textColor="#A51D21"
                         android:textStyle="bold"
                         app:cornerRadius="25dp" />
-
                     <Button
                         android:id="@+id/btnReservar"
                         android:layout_width="0dp"
@@ -211,10 +181,8 @@
                         android:textColor="#FFFFFF"
                         android:textStyle="bold"
                         app:cornerRadius="25dp" />
-
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
     </androidx.cardview.widget.CardView>
 </LinearLayout>
-

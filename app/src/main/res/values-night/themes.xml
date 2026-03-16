@@ -1,12 +1,24 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.ReservasMovil" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/rojo_primario</item>
+        <item name="colorPrimaryVariant">@color/rojo_oscuro</item>
+        <item name="colorOnPrimary">@color/blanco</item>
+        <item name="colorSecondary">@color/rojo_oscuro</item>
+        <item name="colorOnSecondary">@color/blanco</item>
+        <item name="colorAccent">@color/rojo_primario</item>
+        <item name="android:colorControlActivated">@color/rojo_primario</item>
+        <item name="colorControlActivated">@color/rojo_primario</item>
     </style>
     <!-- Base application theme. -->
     <style name="Base.Theme.AppReserva" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/rojo_primario</item>
+        <item name="colorPrimaryVariant">@color/rojo_oscuro</item>
+        <item name="colorOnPrimary">@color/blanco</item>
+        <item name="colorSecondary">@color/rojo_oscuro</item>
+        <item name="colorOnSecondary">@color/blanco</item>
+        <item name="colorAccent">@color/rojo_primario</item>
+        <item name="android:colorControlActivated">@color/rojo_primario</item>
+        <item name="colorControlActivated">@color/rojo_primario</item>
     </style>
 </resources>

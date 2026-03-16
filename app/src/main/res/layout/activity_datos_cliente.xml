@@ -6,7 +6,6 @@
     android:background="@drawable/tu_fondo_difuminado"
     android:orientation="vertical"
     android:gravity="center">
-
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,14 +13,11 @@
         app:cardBackgroundColor="#CC1A1A1A"
         app:cardCornerRadius="16dp"
         app:cardElevation="8dp">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="24dp">
-
-            <!-- Título -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -31,8 +27,6 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_marginBottom="24dp" />
-
-            <!-- Nombre -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -40,15 +34,14 @@
                 android:textColor="#FFFFFF"
                 android:textSize="13sp"
                 android:layout_marginBottom="4dp" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                app:boxStrokeColor="#FFFFFF"
+                app:boxStrokeColor="@color/text_input_stroke_color"
+                app:hintTextColor="@color/rojo_primario"
                 app:boxBackgroundColor="#33FFFFFF">
-
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etNombre"
                     android:layout_width="match_parent"
@@ -58,24 +51,21 @@
                     android:textColorHint="#99FFFFFF"
                     android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Cédula -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Cédula"
+                android:text="Cedula"
                 android:textColor="#FFFFFF"
                 android:textSize="13sp"
                 android:layout_marginBottom="4dp" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                app:boxStrokeColor="#FFFFFF"
+                app:boxStrokeColor="@color/text_input_stroke_color"
+                app:hintTextColor="@color/rojo_primario"
                 app:boxBackgroundColor="#33FFFFFF">
-
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etCedula"
                     android:layout_width="match_parent"
@@ -85,8 +75,6 @@
                     android:textColorHint="#99FFFFFF"
                     android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Correo -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -94,15 +82,14 @@
                 android:textColor="#FFFFFF"
                 android:textSize="13sp"
                 android:layout_marginBottom="4dp" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                app:boxStrokeColor="#FFFFFF"
+                app:boxStrokeColor="@color/text_input_stroke_color"
+                app:hintTextColor="@color/rojo_primario"
                 app:boxBackgroundColor="#33FFFFFF">
-
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etCorreo"
                     android:layout_width="match_parent"
@@ -112,24 +99,21 @@
                     android:textColorHint="#99FFFFFF"
                     android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Teléfono -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Teléfono"
+                android:text="Telefono"
                 android:textColor="#FFFFFF"
                 android:textSize="13sp"
                 android:layout_marginBottom="4dp" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                app:boxStrokeColor="#FFFFFF"
+                app:boxStrokeColor="@color/text_input_stroke_color"
+                app:hintTextColor="@color/rojo_primario"
                 app:boxBackgroundColor="#33FFFFFF">
-
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etTelefono"
                     android:layout_width="match_parent"
@@ -139,14 +123,11 @@
                     android:textColorHint="#99FFFFFF"
                     android:inputType="phone" />
             </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Botones -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:weightSum="2">
-
                 <Button
                     android:id="@+id/btnVolver"
                     android:layout_width="0dp"
@@ -158,7 +139,6 @@
                     android:textColor="#A51D21"
                     android:textStyle="bold"
                     app:cornerRadius="25dp" />
-
                 <Button
                     android:id="@+id/btnContinuar"
                     android:layout_width="0dp"
@@ -170,9 +150,7 @@
                     android:textColor="#FFFFFF"
                     android:textStyle="bold"
                     app:cornerRadius="25dp" />
-
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>
-

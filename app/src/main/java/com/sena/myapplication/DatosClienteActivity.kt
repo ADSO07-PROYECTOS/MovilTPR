@@ -21,6 +21,7 @@ class DatosClienteActivity : BaseActivity() {
         val btnContinuar   = findViewById<Button>(R.id.btnContinuar)
 
         // Recibir extras del carrito
+        val carritoIdPlato = intent.getIntExtra("CARRITO_ID_PLATO", -1)
         val carritoNombre  = intent.getStringExtra("CARRITO_NOMBRE") ?: ""
         val carritoTamano  = intent.getStringExtra("CARRITO_TAMANO") ?: ""
         val carritoCantidad = intent.getIntExtra("CARRITO_CANTIDAD", 1)
@@ -51,6 +52,7 @@ class DatosClienteActivity : BaseActivity() {
                 putExtra("CLI_CORREO",   correo)
                 putExtra("CLI_TELEFONO", telefono)
                 // Datos del carrito (para el pedido)
+                putExtra("CARRITO_ID_PLATO",        carritoIdPlato)
                 putExtra("CARRITO_NOMBRE",          carritoNombre)
                 putExtra("CARRITO_TAMANO",          carritoTamano)
                 putExtra("CARRITO_CANTIDAD",        carritoCantidad)

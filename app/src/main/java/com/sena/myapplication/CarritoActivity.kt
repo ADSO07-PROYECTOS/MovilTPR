@@ -16,6 +16,7 @@ class CarritoActivity : BaseActivity() {
         configurarBarraNavegacion()
 
         // Recibir datos del plato
+        val idPlato      = intent.getIntExtra("CARRITO_ID_PLATO", -1)
         val nombrePlato  = intent.getStringExtra("CARRITO_NOMBRE")    ?: ""
         val nombreTamano = intent.getStringExtra("CARRITO_TAMANO")    ?: ""
         val cantidad     = intent.getIntExtra("CARRITO_CANTIDAD", 1)
@@ -65,6 +66,7 @@ class CarritoActivity : BaseActivity() {
 
         tvBtnPagar.setOnClickListener {
             mostrarDialogoPedido(
+                idPlato      = idPlato,
                 nombrePlato  = nombrePlato,
                 nombreTamano = nombreTamano,
                 cantidad     = cantidadActual,
@@ -74,7 +76,7 @@ class CarritoActivity : BaseActivity() {
     }
 
     private fun mostrarDialogoPedido(
-        nombrePlato: String, nombreTamano: String,
+        idPlato: Int, nombrePlato: String, nombreTamano: String,
         cantidad: Int, precio: Double
     ) {
         val dialogView = layoutInflater.inflate(R.layout.dialog_tipo_pedido, null)
@@ -85,6 +87,7 @@ class CarritoActivity : BaseActivity() {
         dialogView.findViewById<Button>(R.id.btnReservarRestaurante).setOnClickListener {
             dialog.dismiss()
             val intent = Intent(this, DatosClienteActivity::class.java).apply {
+                putExtra("CARRITO_ID_PLATO",        idPlato)
                 putExtra("CARRITO_NOMBRE",          nombrePlato)
                 putExtra("CARRITO_TAMANO",          nombreTamano)
                 putExtra("CARRITO_CANTIDAD",        cantidad)
