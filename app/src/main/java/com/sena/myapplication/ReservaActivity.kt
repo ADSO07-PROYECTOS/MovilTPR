@@ -47,7 +47,6 @@ class ReservaActivity : BaseActivity() {
     setContentView(R.layout.activity_reserva)
     configurarBarraNavegacion()
 
-    // Vistas actualizadas a Buttons
     val btnFecha = findViewById<Button>(R.id.btnFecha)
     val btnBloque = findViewById<Button>(R.id.btnBloque)
     val btnTematica = findViewById<Button>(R.id.btnTematica)
@@ -57,23 +56,20 @@ class ReservaActivity : BaseActivity() {
     val btnVolver = findViewById<Button>(R.id.btnVolverReserva)
     val btnReservar = findViewById<Button>(R.id.btnReservar)
 
-    // Datos del intent (Se mantienen igual)
     val cliNombre = intent.getStringExtra("CLI_NOMBRE") ?: ""
     val cliCedula = intent.getStringExtra("CLI_CEDULA") ?: ""
     val cliCorreo = intent.getStringExtra("CLI_CORREO") ?: ""
     val cliTelefono = intent.getStringExtra("CLI_TELEFONO") ?: ""
 
-    // Datos del carrito (pedido)
-    val carritoIdPlato  = intent.getIntExtra("CARRITO_ID_PLATO", -1)
+    val carritoIdPlato = intent.getIntExtra("CARRITO_ID_PLATO", -1)
     val carritoCantidad = intent.getIntExtra("CARRITO_CANTIDAD", 1)
-    val carritoPrecio   = intent.getDoubleExtra("CARRITO_PRECIO_UNITARIO", 0.0)
+    val carritoPrecio = intent.getDoubleExtra("CARRITO_PRECIO_UNITARIO", 0.0)
 
-    // Listas de Opciones Fijas
     val opcionesBloque = (6..22).map { "$it:00" }
-    val opcionesPiso = listOf("Piso 1", "Piso 2", "Piso 3")
+    val opcionesPiso = listOf("Piso 1", "Piso 2")
     val opcionesMetodo = listOf("Efectivo", "Transferencia")
 
-    // 1. CALENDARIO
+
     btnFecha.setOnClickListener {
       val mañana = Calendar.getInstance()
       mañana.add(Calendar.DAY_OF_YEAR, 1)
@@ -90,7 +86,6 @@ class ReservaActivity : BaseActivity() {
       picker.show()
     }
 
-    // 2. DIÁLOGOS SELECTORES
     btnBloque.setOnClickListener {
       mostrarDialogoSelector("Bloque Horario", opcionesBloque, bloquePos) { pos, texto ->
         bloquePos = pos
@@ -134,28 +129,70 @@ class ReservaActivity : BaseActivity() {
       val personas = etPersonas.text.toString().trim().toIntOrNull() ?: 0
 
       // Validaciones Estrictas
-      if (fechaSeleccionada.isEmpty()) { Toast.makeText(this, "Selecciona una fecha", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
-      if (bloqueHoraStr.isEmpty()) { Toast.makeText(this, "Selecciona un bloque horario", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
-      if (tematicaSeleccionadaId == -1) { Toast.makeText(this, "Selecciona una temática", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
-      if (personas <= 0) { Toast.makeText(this, "Ingresa el número de personas", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
-      if (pisoNumInt == -1) { Toast.makeText(this, "Selecciona un piso", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
-      if (metodoPagoStr.isEmpty()) { Toast.makeText(this, "Selecciona un método de pago", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
+      if (fechaSeleccionada.isEmpty()) {
+        Toast.makeText(this, "Selecciona una fecha", Toast.LENGTH_SHORT)
+          .show(); return@setOnClickListener
+      }
+      if (bloqueHoraStr.isEmpty()) {
+        Toast.makeText(this, "Selecciona un bloque horario", Toast.LENGTH_SHORT)
+          .show(); return@setOnClickListener
+      }
+      if (tematicaSeleccionadaId == -1) {
+        Toast.makeText(this, "Selecciona una temática", Toast.LENGTH_SHORT)
+          .show(); return@setOnClickListener
+      }
+      if (personas <= 0) {
+        Toast.makeText(this, "Ingresa el número de personas", Toast.LENGTH_SHORT)
+          .show(); return@setOnClickListener
+      }
+      if (pisoNumInt == -1) {
+        Toast.makeText(this, "Selecciona un piso", Toast.LENGTH_SHORT)
+          .show(); return@setOnClickListener
+      }
+      if (metodoPagoStr.isEmpty()) {
+        Toast.makeText(this, "Selecciona un método de pago", Toast.LENGTH_SHORT)
+          .show(); return@setOnClickListener
+      }
 
       btnReservar.isEnabled = false
       btnReservar.text = "Enviando..."
 
       val body = ReservaRequest(
-        cliente = ClienteReserva(doc = cliCedula, nom = cliNombre, correo = cliCorreo, tel = cliTelefono),
-        reserva = DatosReserva(fec = fechaSeleccionada, hor = bloqueHoraStr, tematica = tematicaSeleccionadaId, personas = personas, piso = pisoNumInt, metodoPago = metodoPagoStr),
-        pedido = if (carritoIdPlato != -1) listOf(PedidoItem(id = carritoIdPlato, cantidad = carritoCantidad, precio = carritoPrecio)) else listOf()
+        cliente = ClienteReserva(
+          doc = cliCedula,
+          nom = cliNombre,
+          correo = cliCorreo,
+          tel = cliTelefono
+        ),
+        reserva = DatosReserva(
+          fec = fechaSeleccionada,
+          hor = bloqueHoraStr,
+          tematica = tematicaSeleccionadaId,
+          personas = personas,
+          piso = pisoNumInt,
+          metodoPago = metodoPagoStr
+        ),
+        pedido = if (carritoIdPlato != -1) listOf(
+          PedidoItem(
+            id = carritoIdPlato,
+            cantidad = carritoCantidad,
+            precio = carritoPrecio
+          )
+        ) else listOf()
       )
 
-      Log.d("ReservaActivity", "Enviando reserva: cliente=${body.cliente}, reserva=${body.reserva}, pedido=${body.pedido}")
+      Log.d(
+        "ReservaActivity",
+        "Enviando reserva: cliente=${body.cliente}, reserva=${body.reserva}, pedido=${body.pedido}"
+      )
 
       var intentosReserva = 0
       fun enviarReserva() {
         api.crearReserva(body).enqueue(object : Callback<ReservaResponse> {
-          override fun onResponse(call: Call<ReservaResponse>, response: Response<ReservaResponse>) {
+          override fun onResponse(
+            call: Call<ReservaResponse>,
+            response: Response<ReservaResponse>
+          ) {
             btnReservar.isEnabled = true
             btnReservar.text = "RESERVAR"
             Log.d("ReservaActivity", "Response code: ${response.code()}")
@@ -167,7 +204,11 @@ class ReservaActivity : BaseActivity() {
               startActivity(intent)
               finishAffinity()
             } else {
-              val errorBodyStr = try { response.errorBody()?.string() } catch (_: Exception) { null }
+              val errorBodyStr = try {
+                response.errorBody()?.string()
+              } catch (_: Exception) {
+                null
+              }
               Log.e("ReservaActivity", "Error body: $errorBodyStr")
 
               val mensajeError = response.body()?.message
@@ -176,6 +217,7 @@ class ReservaActivity : BaseActivity() {
               Toast.makeText(this@ReservaActivity, mensajeError, Toast.LENGTH_LONG).show()
             }
           }
+
           override fun onFailure(call: Call<ReservaResponse>, t: Throwable) {
             Log.e("ReservaActivity", "onFailure: ${t.message}", t)
             if (intentosReserva < 2) {
@@ -184,7 +226,8 @@ class ReservaActivity : BaseActivity() {
             } else {
               btnReservar.isEnabled = true
               btnReservar.text = "RESERVAR"
-              Toast.makeText(this@ReservaActivity, "Error de red: ${t.message}", Toast.LENGTH_LONG).show()
+              Toast.makeText(this@ReservaActivity, "Error de red: ${t.message}", Toast.LENGTH_LONG)
+                .show()
             }
           }
         })
@@ -197,22 +240,31 @@ class ReservaActivity : BaseActivity() {
 
   private fun cargarTematicas(btnTematica: Button, intentos: Int = 0) {
     api.obtenerTematicas().enqueue(object : Callback<List<TematicaModel>> {
-      override fun onResponse(call: Call<List<TematicaModel>>, response: Response<List<TematicaModel>>) {
+      override fun onResponse(
+        call: Call<List<TematicaModel>>,
+        response: Response<List<TematicaModel>>
+      ) {
         if (response.isSuccessful && response.body() != null) {
           listaTematicas = response.body()!!
           btnTematica.text = "Seleccionar Temática"
           btnTematica.isEnabled = true // Habilitamos el botón ahora que hay datos
         } else if (intentos < 3) cargarTematicas(btnTematica, intentos + 1)
       }
+
       override fun onFailure(call: Call<List<TematicaModel>>, t: Throwable) {
         if (intentos < 3) cargarTematicas(btnTematica, intentos + 1)
-        else Toast.makeText(this@ReservaActivity, "Error al cargar temáticas", Toast.LENGTH_SHORT).show()
+        else Toast.makeText(this@ReservaActivity, "Error al cargar temáticas", Toast.LENGTH_SHORT)
+          .show()
       }
     })
   }
 
-  // FUNCIÓN GENÉRICA PARA CONSTRUIR LA VENTANA EMERGENTE
-  private fun mostrarDialogoSelector(titulo: String, opciones: List<String>, indiceActual: Int, alSeleccionar: (Int, String) -> Unit) {
+  private fun mostrarDialogoSelector(
+    titulo: String,
+    opciones: List<String>,
+    indiceActual: Int,
+    alSeleccionar: (Int, String) -> Unit
+  ) {
     val dialog = Dialog(this)
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
     dialog.setContentView(R.layout.dialog_selector_generico)
@@ -221,21 +273,33 @@ class ReservaActivity : BaseActivity() {
     dialog.findViewById<TextView>(R.id.tvTituloDialogo).text = titulo
     val contenedor = dialog.findViewById<LinearLayout>(R.id.contenedorOpciones)
 
-    var indiceTemp = indiceActual
+    // Si indiceActual es -1 (ninguno seleccionado), forzamos a que el 0 (el primero) sea el seleccionado.
+    var indiceTemp = if (indiceActual == -1 && opciones.isNotEmpty()) 0 else indiceActual
+
     val vistasFilas = mutableListOf<View>()
 
     for (i in opciones.indices) {
-      val vistaFila = LayoutInflater.from(this).inflate(R.layout.item_opcion_dialogo, contenedor, false)
+      val vistaFila =
+        LayoutInflater.from(this).inflate(R.layout.item_opcion_dialogo, contenedor, false)
       val tvTexto = vistaFila.findViewById<TextView>(R.id.tvTextoOpcion)
       val imgCheck = vistaFila.findViewById<ImageButton>(R.id.imgCheckOpcion)
 
       tvTexto.text = opciones[i]
+
+      if (i == indiceTemp) {
+        imgCheck.setImageResource(R.drawable.ic_reserva)
+        tvTexto.setTextColor(Color.parseColor("#A0CBFC"))
+      } else {
+        imgCheck.setImageResource(R.drawable.ic_mas)
+        tvTexto.setTextColor(Color.parseColor("#CCF5F5F5"))
+      }
 
       vistaFila.setOnClickListener {
         indiceTemp = i
         vistasFilas.forEachIndexed { index, vista ->
           val img = vista.findViewById<ImageButton>(R.id.imgCheckOpcion)
           val txt = vista.findViewById<TextView>(R.id.tvTextoOpcion)
+
           if (index == indiceTemp) {
             img.setImageResource(R.drawable.ic_reserva)
             txt.setTextColor(Color.parseColor("#A0CBFC"))
@@ -245,7 +309,6 @@ class ReservaActivity : BaseActivity() {
           }
         }
       }
-      if (i == indiceTemp) vistaFila.performClick() // Autoseleccionar
 
       contenedor.addView(vistaFila)
       vistasFilas.add(vistaFila)
