@@ -1,7 +1,6 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.AppReserva" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Colores primarios (reemplaza el morado por defecto) -->
         <item name="colorPrimary">@color/rojo_primario</item>
         <item name="colorPrimaryVariant">@color/rojo_oscuro</item>
         <item name="colorOnPrimary">@color/blanco</item>
@@ -10,16 +9,13 @@
         <item name="colorOnSecondary">@color/blanco</item>
         <item name="colorAccent">@color/rojo_primario</item>
 
-        <!-- Cursor y selección de texto -->
         <item name="android:colorControlActivated">@color/rojo_primario</item>
         <item name="android:colorControlHighlight">#33A51D21</item>
         <item name="android:textColorHighlight">#55A51D21</item>
 
-        <!-- CheckBox, RadioButton, Switch -->
         <item name="colorControlActivated">@color/rojo_primario</item>
         <item name="colorControlNormal">@color/gris_claro</item>
 
-        <!-- Material 3 tokens -->
         <item name="colorSurface">@color/blanco</item>
         <item name="colorOnSurface">@color/black</item>
         <item name="colorPrimaryContainer">@color/rojo_primario</item>
@@ -29,13 +25,11 @@
         <item name="colorTertiary">@color/rojo_primario</item>
         <item name="colorOnTertiary">@color/blanco</item>
 
-        <!-- TextInputLayout focus color -->
         <item name="colorSurfaceVariant">@color/gris_claro</item>
     </style>
 
     <style name="Theme.AppReserva" parent="Base.Theme.AppReserva" />
 
-    <!-- Diálogo emergente para seleccionar tamaño -->
     <style name="DialogTamano" parent="Theme.MaterialComponents.Dialog.Alert">
         <item name="android:background">#CC1A1A1A</item>
         <item name="android:textColor">#FFFFFF</item>
