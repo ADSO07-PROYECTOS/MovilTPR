@@ -61,7 +61,8 @@
             android:hint="Juan Posada"
             android:textColor="#FFFFFF"
             android:textColorHint="#99FFFFFF"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:maxLength="30" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -89,7 +90,8 @@
             android:hint="1112000000"
             android:textColor="#FFFFFF"
             android:textColorHint="#99FFFFFF"
-            android:inputType="number" />
+            android:inputType="number"
+            android:maxLength="10" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -111,13 +113,14 @@
           app:hintEnabled="false">
 
           <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etCorreo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="ejemplo@gmail.com"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#99FFFFFF"
-            android:inputType="textEmailAddress" />
+              android:id="@+id/etCorreo"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:hint="ejemplo@gmail.com"
+              android:inputType="textEmailAddress"
+              android:maxLength="60"
+              android:textColor="#FFFFFF"
+              android:textColorHint="#99FFFFFF" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -145,8 +148,35 @@
             android:hint="3154444444"
             android:textColor="#FFFFFF"
             android:textColorHint="#99FFFFFF"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:maxLength="10" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Checkbox Habeas Data -->
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:layout_marginBottom="20dp"
+          android:gravity="center_vertical">
+
+          <CheckBox
+            android:id="@+id/cbHabeasData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="#A51D21"
+            android:layout_marginEnd="8dp" />
+
+          <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Autorizo la recopilación y tratamiento de mis datos personales conforme a la política de Habeas Data de Sabores Unidos. Mi información será usada únicamente para gestionar el pedido."
+            android:textColor="#CCFFFFFF"
+            android:textSize="11sp"
+            android:lineSpacingExtra="2dp" />
+
+        </LinearLayout>
 
         <LinearLayout
           android:layout_width="match_parent"

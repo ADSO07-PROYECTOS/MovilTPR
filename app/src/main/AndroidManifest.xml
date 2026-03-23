@@ -15,27 +15,30 @@
         android:theme="@style/Theme.AppReserva"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ConfirmacionReservaActivity"
+            android:name=".views.ConfirmacionReservaActivity"
             android:exported="false" />
         <activity
-            android:name=".DatosClienteActivity"
+            android:name=".views.DomicilioActivity"
             android:exported="false" />
         <activity
-            android:name=".ReservaActivity"
+            android:name=".views.DatosClienteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.ReservaActivity"
             android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
-            android:name=".CarritoActivity"
+            android:name=".views.CarritoActivity"
             android:exported="false" />
         <activity
-            android:name=".PlatoDetalleActivity"
+            android:name=".views.PlatoDetalleActivity"
             android:exported="false"
             android:theme="@style/Theme.AppReserva" />
         <activity
-            android:name=".VerPlatosActivity"
+            android:name=".views.VerPlatosActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".views.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -29,6 +29,19 @@
         android:textStyle="bold"
         android:gravity="center" />
 
+    <!-- Mensaje de carrito vacío -->
+    <TextView
+        android:id="@+id/tvCarritoVacio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvCarritoTitulo"
+        android:layout_above="@id/barraInferior"
+        android:gravity="center"
+        android:text="Tu carrito está vacío.\nAgrega un plato desde el menú."
+        android:textColor="#CCFFFFFF"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
     <!-- Card principal del plato -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardPlato"
