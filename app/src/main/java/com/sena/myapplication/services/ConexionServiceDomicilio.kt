@@ -21,13 +21,9 @@ interface ConexionServiceDomicilio {
 
     companion object {
 
-        /** URL base del microservicio Flask de domicilios. */
         const val BASE_URL = "http://147.182.238.195:5004/"
 
-        /**
-         * Interceptor de logging para depuración.
-         * Registra método, URL, body de request y response en Logcat.
-         */
+
         private val loggingInterceptor = Interceptor { chain ->
             val request = chain.request()
             val bodyStr = request.body()?.let { body ->
@@ -46,10 +42,7 @@ interface ConexionServiceDomicilio {
             response
         }
 
-        /**
-         * Cliente OkHttp con configuración anti-Flask:
-         * pool vacío + Connection: close + logging interceptor.
-         */
+
         private val okHttpClient: OkHttpClient by lazy {
             OkHttpClient.Builder()
                 .connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
@@ -68,7 +61,6 @@ interface ConexionServiceDomicilio {
                 .build()
         }
 
-        /** Instancia singleton de la interfaz Retrofit lista para usar. */
         val instance: ConexionServiceDomicilio by lazy {
             Retrofit.Builder()
                 .baseUrl(BASE_URL)

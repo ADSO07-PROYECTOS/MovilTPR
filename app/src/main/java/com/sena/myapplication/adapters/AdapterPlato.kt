@@ -9,21 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sena.myapplication.R
 import com.sena.myapplication.models.ModelPlato
 
-/**
- * Adapter para la lista de platos dentro de una categoría (VerPlatosActivity).
- *
- * Principio SRP: Solo vincula datos de [ModelPlato] con [R.layout.item_plato].
- * Principio OCP: El clic se delega al lambda [onPlatoClick].
- *
- * @param listaPlatos Lista mutable de platos a mostrar.
- * @param onPlatoClick Lambda invocada al seleccionar un plato.
- */
+
 class AdapterPlato(
     private var listaPlatos: List<ModelPlato>,
     private val onPlatoClick: (ModelPlato) -> Unit
 ) : RecyclerView.Adapter<AdapterPlato.PlatoViewHolder>() {
 
-    /** ViewHolder con referencias a las vistas del item plato. */
     class PlatoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvNombrePlato: TextView      = itemView.findViewById(R.id.tvNombrePlato)
         val tvDescripcionPlato: TextView = itemView.findViewById(R.id.tvDescripcionPlato)
@@ -50,10 +41,6 @@ class AdapterPlato(
 
     override fun getItemCount(): Int = listaPlatos.size
 
-    /**
-     * Actualiza la lista de platos con animación por rangos.
-     * Elimina los items anteriores y añade los nuevos.
-     */
     fun actualizarLista(nuevaLista: List<ModelPlato>) {
         val oldSize = listaPlatos.size
         listaPlatos = nuevaLista

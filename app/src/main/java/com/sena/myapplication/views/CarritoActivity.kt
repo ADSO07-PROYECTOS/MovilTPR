@@ -8,20 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import com.sena.myapplication.R
 import com.sena.myapplication.databinding.ActivityCarritoBinding
 
-/**
- * Pantalla del carrito — Muestra el resumen del plato añadido y permite
- * ajustar la cantidad antes de proceder al pago.
- *
- * Principio SRP: Solo gestiona la UI del carrito (cantidad, total, diálogo
- * de tipo de pedido). No realiza llamadas de red.
- *
- * Principio OCP: Hereda la barra de navegación de [BaseActivity].
- * El diálogo de tipo de pedido se encapsula en [mostrarDialogoPedido].
- *
- * Recibe datos del plato vía Intent extras con prefijo CARRITO_*.
- * Al pulsar "Ir a pagar", muestra un diálogo para elegir entre
- * reservar en restaurante o pedir a domicilio.
- */
+
 class CarritoActivity : BaseActivity() {
 
     private lateinit var binding: ActivityCarritoBinding
@@ -95,10 +82,7 @@ class CarritoActivity : BaseActivity() {
         }
     }
 
-    /**
-     * Diálogo de tipo de pedido: Reservar en restaurante vs. Domicilio.
-     * Principio SRP: Encapsula la lógica del diálogo en su propio método.
-     */
+
     private fun mostrarDialogoPedido(
         idPlato: Int, nombrePlato: String, nombreTamano: String,
         cantidad: Int, precio: Double

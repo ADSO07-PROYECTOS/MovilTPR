@@ -9,23 +9,11 @@ import com.sena.myapplication.models.ModelPlato
 import com.sena.myapplication.services.ConexionServiceMenu
 import kotlinx.coroutines.launch
 
-/**
- * ViewModel para la pantalla de platos por categoría (VerPlatosActivity).
- *
- * Principio SRP: Solo gestiona la obtención de platos de una categoría.
- * Cachea la última categoría cargada para evitar llamadas duplicadas.
- *
- * Principio DIP (Dependency Inversion): Depende de la interfaz
- * [ConexionServiceMenu] y no de una implementación concreta de Retrofit.
- *
- * Usa coroutines con [viewModelScope] para llamadas asíncronas.
- * Implementa reintento automático (máx. 2) ante fallos de red.
- */
+
 class ViewModelPlato : ViewModel() {
 
     private val api = ConexionServiceMenu.instance
 
-    // LiveData encapsulado: mutable privado, inmutable público
     private val _platos = MutableLiveData<List<ModelPlato>>()
     val platos: LiveData<List<ModelPlato>> get() = _platos
 
@@ -35,13 +23,8 @@ class ViewModelPlato : ViewModel() {
     private val _cargando = MutableLiveData<Boolean>()
     val cargando: LiveData<Boolean> get() = _cargando
 
-    /** ID de la última categoría cargada para evitar recarga innecesaria. */
     private var ultimaCategoriaId: Int = -1
 
-    /**
-     * Obtiene los platos de la categoría indicada.
-     * Si ya se cargaron los platos de esta categoría, no vuelve a llamar al API.
-     */
     fun obtenerPlatosPorCategoria(idCategoria: Int) {
         if (idCategoria == ultimaCategoriaId && _platos.value != null) return
         ultimaCategoriaId = idCategoria

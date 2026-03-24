@@ -13,7 +13,6 @@ import com.sena.myapplication.viewmodels.ViewModelCategoria
 
 class MainActivity : BaseActivity() {
 
-    /** ViewBinding generado desde activity_main3.xml. */
     private lateinit var binding: ActivityMain3Binding
 
     private lateinit var adapter: AdapterCategoria
@@ -49,10 +48,7 @@ class MainActivity : BaseActivity() {
         viewModel.obtenerCategorias()
     }
 
-    /**
-     * Navega a la pantalla de platos de la categoría seleccionada.
-     * Pasa ID y nombre como extras del Intent.
-     */
+
     private fun abrirPlatos(categoria: ModelCategoria) {
         val intent = Intent(this, VerPlatosActivity::class.java).apply {
             putExtra("ID_CATEGORIA", categoria.id)

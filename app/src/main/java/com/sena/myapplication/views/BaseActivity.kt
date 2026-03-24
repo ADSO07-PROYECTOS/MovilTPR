@@ -121,15 +121,7 @@ open class BaseActivity : AppCompatActivity() {
 
     // ==================== UTILIDADES DE ARCHIVOS ====================
 
-    /**
-     * Codifica una imagen desde su URI a una cadena Base64.
-     * Lee los bytes a través del ContentResolver y los convierte.
-     *
-     * Principio SRP: Método utilitario puro — solo transforma URI → Base64.
-     *
-     * @param uri URI de la imagen a codificar.
-     * @return String en Base64 o null si ocurre un error de lectura.
-     */
+
     protected fun codificarImagenBase64(uri: Uri): String? {
         return try {
             val inputStream = contentResolver.openInputStream(uri) ?: return null
@@ -142,13 +134,7 @@ open class BaseActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Obtiene el nombre legible del archivo desde una URI de contenido.
-     * Intenta extraerlo del cursor de MediaStore; si no, retorna un texto genérico.
-     *
-     * @param uri URI del archivo seleccionado.
-     * @return Nombre del archivo o "Comprobante seleccionado" como fallback.
-     */
+
     protected fun obtenerNombreArchivo(uri: Uri): String {
         var nombre = "Comprobante seleccionado"
         contentResolver.query(uri, null, null, null, null)?.use { cursor ->

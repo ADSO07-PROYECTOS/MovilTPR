@@ -23,21 +23,7 @@ import com.sena.myapplication.viewmodels.ViewModelDomicilio
 import java.text.NumberFormat
 import java.util.Locale
 
-/**
- * Pantalla de envío a domicilio — Recopila dirección, barrio/referencia
- * y método de pago para completar el pedido.
- *
- * Principio SRP: Solo gestiona la UI del formulario de domicilio.
- * La lógica de red se delega a [ViewModelDomicilio].
- *
- * Principio OCP: Hereda [mostrarDialogoSelector], [codificarImagenBase64]
- * y [obtenerNombreArchivo] de [BaseActivity] sin modificarlos.
- *
- * Principio DIP: Depende de la abstracción [ViewModelDomicilio],
- * no de llamadas Retrofit directas.
- *
- * Recibe datos del cliente (CLI_*) y del carrito (CARRITO_*) vía Intent extras.
- */
+
 class DomicilioActivity : BaseActivity() {
 
     private lateinit var binding: ActivityDomicilioBinding
