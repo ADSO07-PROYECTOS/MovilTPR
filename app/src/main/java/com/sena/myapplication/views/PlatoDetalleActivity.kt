@@ -40,6 +40,8 @@ class PlatoDetalleActivity : BaseActivity() {
     private var listaTamanos: List<ModelTamano> = emptyList()
     private var tamanoSeleccionado: ModelTamano? = null
     private var precioTamanoSeleccionado: Double = 0.0
+    // Estado de precios de sabores seleccionados
+    private var precioSaboresTotalVal: Double = 0.0
     private var precioAdicionesTotal: Double = 0.0
     private var cantidad: Int = 1
 
@@ -127,8 +129,8 @@ class PlatoDetalleActivity : BaseActivity() {
                 putExtra("CARRITO_NOMBRE",          nombrePlato)
                 putExtra("CARRITO_TAMANO",          tamanoNombre)
                 putExtra("CARRITO_CANTIDAD",        cantidad)
-                putExtra("CARRITO_PRECIO_UNITARIO", precioTamanoSeleccionado + precioAdicionesTotal)
-                putExtra("CARRITO_PRECIO_TOTAL",    (precioTamanoSeleccionado + precioAdicionesTotal) * cantidad)
+                putExtra("CARRITO_PRECIO_UNITARIO", precioTamanoSeleccionado + precioAdicionesTotal + precioSaboresTotalVal)
+                putExtra("CARRITO_PRECIO_TOTAL",    (precioTamanoSeleccionado + precioAdicionesTotal + precioSaboresTotalVal) * cantidad)
             }
             startActivity(intent)
         }
@@ -185,6 +187,7 @@ class PlatoDetalleActivity : BaseActivity() {
     private fun observarSabores() {
         viewModel.sabores.observe(this) { sabores ->
             binding.layoutSabores.removeAllViews()
+            precioSaboresTotalVal = 0.0
             if (sabores.isEmpty()) return@observe
 
             val inflater = LayoutInflater.from(this)
@@ -192,8 +195,19 @@ class PlatoDetalleActivity : BaseActivity() {
                 val item = inflater.inflate(R.layout.item_sabor, binding.layoutSabores, false)
                 item.findViewById<TextView>(R.id.tvNombreSabor).text = sabor.nombre
 
+                // Mostrar precio del sabor
+                val tvPrecio = item.findViewById<TextView>(R.id.tvPrecioSabor)
+                tvPrecio.text = getString(R.string.precio_total_label, sabor.precio.toInt())
+
                 val checkbox = item.findViewById<android.widget.CheckBox>(R.id.checkboxSabor)
-                checkbox.setOnCheckedChangeListener { _, _ -> }
+                checkbox.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        precioSaboresTotalVal += sabor.precio
+                    } else {
+                        precioSaboresTotalVal -= sabor.precio
+                    }
+                    actualizarPrecioTotal()
+                }
 
                 binding.layoutSabores.addView(item)
             }
@@ -241,9 +255,9 @@ class PlatoDetalleActivity : BaseActivity() {
 
     // ==================== PRECIO ====================
 
-    /** Recalcula y muestra el precio total: (tamaño + adiciones) × cantidad. */
+    /** Recalcula y muestra el precio total: (tamaño + adiciones + sabores) × cantidad. */
     private fun actualizarPrecioTotal() {
-        val total = (precioTamanoSeleccionado + precioAdicionesTotal) * cantidad
+        val total = (precioTamanoSeleccionado + precioAdicionesTotal + precioSaboresTotalVal) * cantidad
         binding.tvPrecioTotal.text = getString(R.string.precio_total_label, total.toInt())
     }
 }

@@ -14,17 +14,8 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 import java.util.concurrent.TimeUnit
 
-/**
- * Interfaz de conexión Retrofit para el API de domicilios (puerto 5004).
- *
- * Microservicio Flask separado que gestiona pedidos a domicilio.
- * Principio ISP: Solo el endpoint de domicilios.
- * Principio SRP: El companion object concentra la configuración de red
- * exclusiva para este microservicio.
- */
 interface ConexionServiceDomicilio {
 
-    /** Crea un pedido a domicilio con datos de cliente, domicilio y productos. */
     @POST("api/domicilios")
     suspend fun crearDomicilio(@Body body: DomicilioRequest): Response<DomicilioResponse>
 
