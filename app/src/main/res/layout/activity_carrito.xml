@@ -5,36 +5,37 @@
     android:layout_height="match_parent"
     android:background="@drawable/tu_fondo_difuminado">
 
-    <!-- Botón atrás -->
-    <ImageButton
-        android:id="@+id/btnCarritoAtras"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_margin="16dp"
-        android:background="@drawable/ic_circulo"
-        android:src="@drawable/ic_flecha_atras"
-        android:padding="8dp"
-        android:contentDescription="Atrás" />
-
-    <!-- Título -->
-    <TextView
-        android:id="@+id/tvCarritoTitulo"
+    <RelativeLayout
+        android:id="@+id/layout_header_carrito"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnCarritoAtras"
-        android:layout_marginTop="8dp"
-        android:text="@string/carrito_titulo"
-        android:textColor="#FFFFFF"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:gravity="center" />
+        android:layout_height="60dp"
+        android:padding="10dp"
+        android:background="#66000000">
+
+        <ImageButton
+            android:id="@+id/btn_volver_carrito"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/ic_circulo"
+            android:src="@drawable/ic_flecha_atras"/>
+        <TextView
+            android:id="@+id/tv_titulo_resumen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/resumen_de_tu_carrito"
+            android:textColor="#FFFFFF"
+            android:layout_marginLeft="60dp"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-condensed" />
+
+    </RelativeLayout>
 
     <!-- Mensaje de carrito vacío -->
     <TextView
         android:id="@+id/tvCarritoVacio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvCarritoTitulo"
         android:layout_above="@id/barraInferior"
         android:gravity="center"
         android:text="Tu carrito está vacío.\nAgrega un plato desde el menú."
@@ -47,9 +48,8 @@
         android:id="@+id/cardPlato"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvCarritoTitulo"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="100dp"
         app:cardBackgroundColor="#CCFFFFFF"
         app:cardCornerRadius="16dp"
         app:cardElevation="4dp">

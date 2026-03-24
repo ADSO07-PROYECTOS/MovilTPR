@@ -3,18 +3,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/tu_fondo_difuminado">
-
-    <TextView
-        android:id="@+id/tvCategoriaNombre"
+    <RelativeLayout
+        android:id="@+id/layout_header_carrito"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Categoría"
-        android:textColor="#FFFFFF"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:textAlignment="center"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"/>
+        android:layout_height="60dp"
+        android:padding="10dp"
+        android:background="#66000000">
+
+        <ImageButton
+            android:id="@+id/btn_volver_carrito"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/ic_circulo"
+            android:src="@drawable/ic_flecha_atras"/>
+
+        <TextView
+            android:id="@+id/tv_titulo_resumen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/resumen_de_tu_carrito"
+            android:textColor="#FFFFFF"
+            android:layout_marginLeft="60dp"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-condensed" />
+
+    </RelativeLayout>
+
 
     <include
         android:id="@+id/barraInferior"
@@ -28,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/barraInferior"
-        android:layout_below="@id/tvCategoriaNombre"
+        android:layout_below="@id/layout_header_carrito"
         android:padding="10dp"
         android:clipToPadding="false"/>
 
