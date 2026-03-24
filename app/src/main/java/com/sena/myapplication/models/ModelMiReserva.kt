@@ -2,13 +2,33 @@ package com.sena.myapplication.models
 
 import com.google.gson.annotations.SerializedName
 
+// ==================================================================
+// Wrapper de respuesta — GET /api/mis_reservas?cedula=XXX (puerto 5007)
+// ==================================================================
 
+/**
+ * Wrapper que envuelve la lista de reservas devuelta por el microservicio.
+ * El JSON tiene la forma: {"reservas": [...], "sin_resultados": bool}
+ */
 data class MisReservasResponse(
     @SerializedName("reservas")       val reservas: List<ModelMiReserva> = emptyList(),
     @SerializedName("sin_resultados") val sinResultados: Boolean = true
 )
 
+// ==================================================================
+// Modelo de una reserva consultada
+// ==================================================================
 
+/**
+ * Modelo de respuesta al consultar reservas de un cliente por cédula.
+ * Endpoint: GET /api/mis_reservas?cedula=XXX (puerto 5007)
+ *
+ * Principio SRP: Responsabilidad única de representar una reserva consultada.
+ * Los campos @SerializedName coinciden con las claves JSON del API Flask.
+ *
+ * IMPORTANTE: Todos los campos usan valores por defecto para que Gson
+ * nunca genere NullPointerException si el backend omite alguna clave.
+ */
 data class ModelMiReserva(
     @SerializedName("reserva_id")        val reservaId: Int = 0,
     @SerializedName("fecha_hora")        val fechaHora: String = "",
@@ -25,11 +45,17 @@ data class ModelMiReserva(
     @SerializedName("cc_cliente")        val cedula: String? = null,
     @SerializedName("pedido")            val pedido: List<PedidoDetalle>? = null
 ) {
-
+    /**
+     * Extrae solo la parte de fecha "YYYY-MM-DD" de [fechaHora].
+     * Ejemplo: "2026-03-24 07:00:00" → "2026-03-24"
+     */
     fun extraerFecha(): String =
         if (fechaHora.length >= 10) fechaHora.substring(0, 10) else fechaHora
 
-
+    /**
+     * Extrae solo la hora (entero) de [fechaHora].
+     * Ejemplo: "2026-03-24 07:00:00" → "7"
+     */
     fun extraerHora(): String {
         if (fechaHora.length >= 13) {
             val h = fechaHora.substring(11, 13).trimStart('0')
@@ -39,12 +65,25 @@ data class ModelMiReserva(
     }
 }
 
+/**
+ * Detalle de un producto en el pedido de la reserva.
+ *
+ * Principio SRP: Responsabilidad única de representar un item del pedido.
+ * Usa valores por defecto para evitar crashes si el backend omite campos.
+ */
 data class PedidoDetalle(
     @SerializedName("nombre_producto") val nombre: String = "",
     @SerializedName("cantidad")        val cantidad: Int = 0,
     @SerializedName("notas")           val notas: String? = null
 )
 
+/**
+ * Body para actualizar una reserva existente.
+ * Endpoint: PUT /api/mis_reservas/{id_reserva} (puerto 5007)
+ *
+ * Principio SRP: Responsabilidad única de transportar los datos de edición.
+ * Las claves @SerializedName coinciden con lo que espera la ruta Flask.
+ */
 data class ActualizarReservaRequest(
     @SerializedName("fecha_hora") val fechaHora: String,
     @SerializedName("personas")   val personas: Int,

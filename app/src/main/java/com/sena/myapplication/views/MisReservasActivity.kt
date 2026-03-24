@@ -248,6 +248,7 @@ class MisReservasActivity : BaseActivity() {
                 fechaHora = fechaHoraCombinada,
                 personas = personas,
                 tematicaId = tematicaIdSel,
+                piso = pisoSel,
                 nombre = reserva.nombreCliente,
                 email = reserva.email,
                 telefono = reserva.telefono

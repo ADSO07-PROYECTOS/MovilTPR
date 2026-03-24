@@ -53,7 +53,9 @@ open class BaseActivity : AppCompatActivity() {
         startActivity(Intent(this, CarritoActivity::class.java))
       }
 
-      btnNotificacion.setOnClickListener { /* Pendiente: pantalla de reservas */ }
+      btnNotificacion.setOnClickListener {
+        startActivity(Intent(this, MisReservasActivity::class.java))
+      }
     }
 
     protected fun mostrarDialogoSelector(
