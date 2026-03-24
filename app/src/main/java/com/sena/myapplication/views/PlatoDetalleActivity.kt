@@ -15,22 +15,6 @@ import com.sena.myapplication.models.ModelTamano
 import com.sena.myapplication.services.ConexionServiceMenu
 import com.sena.myapplication.viewmodels.ViewModelPlatoDetalle
 
-/**
- * Pantalla de detalle de plato — Permite seleccionar tamaño, sabores y adiciones.
- *
- * Principio SRP: Solo gestiona la UI de configuración del plato.
- * La carga de extras se delega a [ViewModelPlatoDetalle].
- *
- * Principio OCP: Hereda la barra de navegación de [BaseActivity].
- * Si se añaden nuevos tipos de extras, se agregan nuevos observers
- * sin modificar los existentes.
- *
- * Principio DIP: Depende de la abstracción [ViewModelPlatoDetalle],
- * no de llamadas Retrofit directas.
- *
- * Recibe los datos básicos del plato vía Intent extras (ID_PLATO, NOMBRE_PLATO, etc.).
- * Al pulsar "Añadir", valida la selección y navega al carrito.
- */
 class PlatoDetalleActivity : BaseActivity() {
 
     private lateinit var binding: PlatoDetalleBinding
@@ -138,7 +122,6 @@ class PlatoDetalleActivity : BaseActivity() {
 
     // ==================== TAMAÑOS ====================
 
-    /** Observa los tamaños del ViewModel y selecciona el primero por defecto. */
     private fun observarTamanos() {
         viewModel.tamanos.observe(this) { tamanos ->
             if (tamanos.isEmpty()) return@observe
@@ -147,7 +130,6 @@ class PlatoDetalleActivity : BaseActivity() {
         }
     }
 
-    /** Aplica el tamaño seleccionado a la UI y actualiza el precio. */
     private fun seleccionarTamano(tamano: ModelTamano) {
         tamanoSeleccionado = tamano
         precioTamanoSeleccionado = tamano.precio
@@ -160,7 +142,6 @@ class PlatoDetalleActivity : BaseActivity() {
             android.view.View.VISIBLE else android.view.View.GONE
     }
 
-    /** Muestra un diálogo para elegir el tamaño del plato. */
     private fun mostrarDialogoTamanos() {
         val opciones = listaTamanos.map {
             "${it.nombre}  —  $${"%,.0f".format(it.precio)}"
@@ -183,7 +164,6 @@ class PlatoDetalleActivity : BaseActivity() {
 
     // ==================== SABORES ====================
 
-    /** Observa los sabores y genera las vistas de checkbox dinámicamente. */
     private fun observarSabores() {
         viewModel.sabores.observe(this) { sabores ->
             binding.layoutSabores.removeAllViews()
@@ -216,7 +196,6 @@ class PlatoDetalleActivity : BaseActivity() {
 
     // ==================== ADICIONES ====================
 
-    /** Observa las adiciones y genera las vistas con controles +/- dinámicamente. */
     private fun observarAdiciones() {
         viewModel.adiciones.observe(this) { adiciones ->
             binding.layoutAdiciones.removeAllViews()
@@ -255,7 +234,6 @@ class PlatoDetalleActivity : BaseActivity() {
 
     // ==================== PRECIO ====================
 
-    /** Recalcula y muestra el precio total: (tamaño + adiciones + sabores) × cantidad. */
     private fun actualizarPrecioTotal() {
         val total = (precioTamanoSeleccionado + precioAdicionesTotal + precioSaboresTotalVal) * cantidad
         binding.tvPrecioTotal.text = getString(R.string.precio_total_label, total.toInt())
