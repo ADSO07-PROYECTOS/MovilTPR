@@ -29,10 +29,7 @@ class ViewModelPlatoDetalle : ViewModel() {
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> get() = _error
 
-    /**
-     * Solicita los extras al servidor.
-     * Una sola llamada a /api/extras carga tamaños, sabores y adiciones.
-     */
+
     fun cargarExtras() {
         realizarLlamada(intentos = 0)
     }
@@ -68,7 +65,7 @@ class ViewModelPlatoDetalle : ViewModel() {
         }
     }
 
-    /** Publica listas vacías en los tres LiveData cuando hay error. */
+
     private fun publicarVacios() {
         _tamanos.value = emptyList()
         _sabores.value = emptyList()

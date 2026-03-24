@@ -54,12 +54,7 @@ class ConfirmacionReservaActivity : BaseActivity() {
         }
     }
 
-    /**
-     * Guarda el QR como imagen PNG en la galería del dispositivo.
-     *
-     * Para API 29+ (Android 10+): Usa MediaStore (no requiere permisos).
-     * Para API < 29: Escribe directamente en la carpeta Pictures.
-     */
+
     private fun guardarQrEnGaleria() {
         val bitmap = qrBitmap
         if (bitmap == null) {

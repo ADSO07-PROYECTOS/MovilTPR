@@ -47,25 +47,19 @@
                     android:textColor="#FFFFFF"
                     android:textSize="13sp"
                     android:layout_marginBottom="4dp" />
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="@color/text_input_stroke_color"
-                    app:hintTextColor="@color/rojo_primario"
-                    app:boxBackgroundColor="#33FFFFFF">
-                  <androidx.appcompat.widget.AppCompatButton
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnFecha"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginEnd="5dp"
-                    android:text="FECHA"
-                    android:textAllCaps="true"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="16dp"
                     android:background="@drawable/borde_spinner_oscuro"
-                    android:textColorHint="#FFFFFF"
-                    android:textSize="13sp"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:textColor="#FFFFFF"
+                    android:text="Seleccionar Fecha"
+                    android:gravity="center_vertical|start"
+                    android:paddingHorizontal="15dp"
+                    android:textAllCaps="false"
+                    android:drawableStart="@drawable/ic_calendario"
+                    android:drawablePadding="10dp" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -87,7 +81,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Tematica"
+                    android:text="Temática"
                     android:textColor="#FFFFFF"
                     android:textSize="13sp"
                     android:layout_marginBottom="4dp" />
@@ -98,7 +92,7 @@
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/borde_spinner_oscuro"
                 android:textColor="#FFFFFF"
-                android:text="Cargando tematicas..."
+                android:text="Cargando temáticas..."
                 android:gravity="center_vertical|start"
                 android:paddingHorizontal="15dp"
                 android:textAllCaps="false"
@@ -149,7 +143,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Metodo de pago"
+                    android:text="Método de pago"
                     android:textColor="#FFFFFF"
                     android:textSize="13sp"
                     android:layout_marginBottom="4dp" />
@@ -160,7 +154,7 @@
                   android:layout_marginBottom="24dp"
                   android:background="@drawable/borde_spinner_oscuro"
                   android:textColor="#FFFFFF"
-                  android:text="Seleccionar Metodo"
+                  android:text="Seleccionar Método"
                   android:gravity="center_vertical|start"
                   android:paddingHorizontal="15dp"
                   android:textAllCaps="false"/>

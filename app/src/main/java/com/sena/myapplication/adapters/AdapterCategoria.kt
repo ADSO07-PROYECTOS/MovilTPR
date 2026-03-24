@@ -12,24 +12,12 @@ import com.sena.myapplication.R
 import com.sena.myapplication.models.ModelCategoria
 import com.sena.myapplication.services.ConexionServiceMenu
 
-/**
- * Adapter para la grilla de categorías en MainActivity.
- *
- * Principio SRP: Solo se encarga de vincular datos de [ModelCategoria]
- * con las vistas del item layout [R.layout.item_menu].
- *
- * Principio OCP: El comportamiento de clic se delega a la lambda
- * [onCategoriaClick], permitiendo cambiar la acción sin modificar el adapter.
- *
- * @param listaCategorias Lista inmutable de categorías a mostrar.
- * @param onCategoriaClick Lambda invocada al hacer clic en una categoría.
- */
+
 class AdapterCategoria(
     private var listaCategorias: List<ModelCategoria>,
     private val onCategoriaClick: (ModelCategoria) -> Unit
 ) : RecyclerView.Adapter<AdapterCategoria.CategoriaViewHolder>() {
 
-    /** ViewHolder que mantiene las referencias a las vistas del item. */
     class CategoriaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvNombreCategoria: TextView  = itemView.findViewById(R.id.tvNombreCategoria)
         val tvTamanoCategoria: TextView  = itemView.findViewById(R.id.tvTamanoCategoria)
@@ -65,7 +53,6 @@ class AdapterCategoria(
 
     override fun getItemCount(): Int = listaCategorias.size
 
-    /** Actualiza la lista y notifica al RecyclerView del cambio completo. */
     fun actualizarLista(nuevaLista: List<ModelCategoria>) {
         listaCategorias = nuevaLista
         notifyDataSetChanged()

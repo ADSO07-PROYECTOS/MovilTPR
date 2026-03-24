@@ -73,16 +73,7 @@ class DatosClienteActivity : BaseActivity() {
         }
     }
 
-    /**
-     * Valida todos los campos del formulario de datos del cliente.
-     * Verifica campos vacíos, longitud mínima/máxima, formato numérico
-     * y formato de caracteres permitidos.
-     *
-     * Principio SRP: Concentra todas las reglas de validación del formulario
-     * en un solo método, facilitando su mantenimiento.
-     *
-     * @return true si todo es válido, false si hay algún error.
-     */
+
     private fun validarCamposObligatorios(
         nombre: String, cedula: String, correo: String, telefono: String
     ): Boolean {

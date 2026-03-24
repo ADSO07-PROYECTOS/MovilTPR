@@ -5,35 +5,14 @@
     android:layout_height="match_parent"
     android:background="@drawable/tu_fondo_difuminado">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarSuperior"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#66000000">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingEnd="10dp">
-
-            <ImageView
-                android:id="@+id/MenuHamburguesa"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_menu"
-                android:contentDescription="Menu" />
-        </RelativeLayout>
-    </androidx.appcompat.widget.Toolbar>
 
     <ImageView
         android:id="@+id/imgLogo"
         android:layout_width="191dp"
         android:layout_height="87dp"
-        android:layout_below="@id/toolbarSuperior"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="-15dp"
+        android:layout_marginTop="20dp"
         android:contentDescription="Sabores Unidos"
         android:scaleType="fitCenter"
         android:src="@drawable/saboresunidos" />

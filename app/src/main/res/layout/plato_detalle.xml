@@ -205,10 +205,10 @@
 
     <!-- Barra inferior: cantidad + precio dinámico -->
     <LinearLayout
-        android:id="@+id/barraInferior"
+        android:id="@+id/barraInferior2"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_above="@+id/barraNavegacion"
+        android:layout_above="@+id/barraInferior"
         android:background="#E0E0E0"
         android:gravity="center"
         android:orientation="horizontal"
@@ -261,7 +261,7 @@
 
     <!-- Barra de navegación inferior -->
     <include
-        android:id="@+id/barraNavegacion"
+        android:id="@+id/barraInferior"
         layout="@layout/barra_navegacion"
         android:layout_width="match_parent"
         android:layout_height="60dp"
