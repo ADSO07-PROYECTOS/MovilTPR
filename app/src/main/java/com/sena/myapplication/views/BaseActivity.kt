@@ -8,40 +8,58 @@ import android.net.Uri
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.sena.myapplication.R
 
 open class BaseActivity : AppCompatActivity() {
 
-    protected fun configurarBarraNavegacion() {
-        val btnCasa         = findViewById<ImageButton?>(R.id.btnCasa)         ?: return
-        val btnCarrito      = findViewById<ImageButton?>(R.id.btnCarrito)      ?: return
-        val btnNotificacion = findViewById<ImageButton?>(R.id.btnNotification) ?: return
+  protected fun configurarBarraNavegacion() {
+    val btnCasa         = findViewById<ImageButton?>(R.id.btnCasa)         ?: return
+    val btnCarrito      = findViewById<ImageButton?>(R.id.btnCarrito)      ?: return
+    val btnNotificacion = findViewById<ImageButton?>(R.id.btnNotification) ?: return
 
-        // Botón Casa → Volver a MainActivity limpiando la pila
-        btnCasa.setOnClickListener {
-            startActivity(
-                Intent(this, MainActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                }
-            )
-        }
+    // --- CÓDIGO NUEVO PARA EVITAR SUPERPOSICIÓN DEL TELÉFONO ---
+    val barraInferior = findViewById<View>(R.id.barraInferior)
+    if (barraInferior != null) {
+      ViewCompat.setOnApplyWindowInsetsListener(barraInferior) { view, insets ->
+        // Detectamos la altura exacta de la barra de navegación del teléfono
+        val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
 
-        // Botón Carrito → Abrir CarritoActivity
-        btnCarrito.setOnClickListener {
-            startActivity(Intent(this, CarritoActivity::class.java))
-        }
+        // Le aplicamos esa altura como margen inferior a tu barra para empujarla arriba
+        val params = view.layoutParams as ViewGroup.MarginLayoutParams
+        params.bottomMargin = systemBars.bottom
+        view.layoutParams = params
 
-        // Botón Mis Reservas → Abrir MisReservasActivity
-        btnNotificacion.setOnClickListener {
-            startActivity(Intent(this, MisReservasActivity::class.java))
-        }
+        insets
+      }
     }
+    // -----------------------------------------------------------
+
+    btnCasa.setOnClickListener {
+      startActivity(
+        Intent(this, MainActivity::class.java).apply {
+          flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+      )
+    }
+
+    btnCarrito.setOnClickListener {
+      startActivity(Intent(this, CarritoActivity::class.java))
+    }
+
+
+    btnNotificacion.setOnClickListener {
+      startActivity(Intent(this, MisReservasActivity::class.java))
+    }
+  }
 
     // ==================== DIÁLOGO SELECTOR GENÉRICO ====================
 

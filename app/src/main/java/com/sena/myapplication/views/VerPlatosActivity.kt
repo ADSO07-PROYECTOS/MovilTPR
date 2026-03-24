@@ -53,6 +53,7 @@ class VerPlatosActivity : BaseActivity() {
         } else {
             Toast.makeText(this, "Error: No se recibió la categoría", Toast.LENGTH_SHORT).show()
         }
+        binding.btnAtras.setOnClickListener { finish() }
     }
 
     private fun abrirDetalle(plato: ModelPlato) {

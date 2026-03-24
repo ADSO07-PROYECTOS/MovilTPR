@@ -15,22 +15,6 @@ import com.sena.myapplication.models.ModelTamano
 import com.sena.myapplication.services.ConexionServiceMenu
 import com.sena.myapplication.viewmodels.ViewModelPlatoDetalle
 
-/**
- * Pantalla de detalle de plato — Permite seleccionar tamaño, sabores y adiciones.
- *
- * Principio SRP: Solo gestiona la UI de configuración del plato.
- * La carga de extras se delega a [ViewModelPlatoDetalle].
- *
- * Principio OCP: Hereda la barra de navegación de [BaseActivity].
- * Si se añaden nuevos tipos de extras, se agregan nuevos observers
- * sin modificar los existentes.
- *
- * Principio DIP: Depende de la abstracción [ViewModelPlatoDetalle],
- * no de llamadas Retrofit directas.
- *
- * Recibe los datos básicos del plato vía Intent extras (ID_PLATO, NOMBRE_PLATO, etc.).
- * Al pulsar "Añadir", valida la selección y navega al carrito.
- */
 class PlatoDetalleActivity : BaseActivity() {
 
     private lateinit var binding: PlatoDetalleBinding

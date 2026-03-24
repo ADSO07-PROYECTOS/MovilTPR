@@ -7,6 +7,25 @@
     android:background="@drawable/tu_fondo_difuminado"
     android:orientation="vertical">
 
+  <androidx.appcompat.widget.Toolbar
+    android:id="@+id/toolbarSuperior"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="#66000000">
+
+    <ImageButton
+      android:id="@+id/btnAtras"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      android:background="@drawable/ic_circulo"
+      android:src="@drawable/ic_flecha_atras"
+      android:padding="8dp"
+      android:layout_gravity="start"
+      android:contentDescription="@string/previous" />
+
+
+  </androidx.appcompat.widget.Toolbar>
+
 
     <TextView
         android:id="@+id/titleMenu"
