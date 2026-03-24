@@ -21,37 +21,26 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 import java.util.concurrent.TimeUnit
 
-/**
- * Interfaz de conexión Retrofit para el API de reservas (puerto 5005).
- *
- * Principio ISP: Solo endpoints de reservas y temáticas.
- * Principio SRP: El companion object concentra la configuración de red
- * para este servicio específico.
- */
+
 interface ConexionServiceReserva {
 
-    /** Obtiene la lista de temáticas disponibles para reservar. */
     @GET("api/tematicas")
     suspend fun obtenerTematicas(): Response<List<ModelTematica>>
 
-    /** Crea una nueva reserva con datos de cliente, reserva y pedido. */
     @POST("api/reservas")
     suspend fun crearReserva(@Body body: ReservaRequest): Response<ReservaResponse>
 
-    /** Consulta las reservas de un cliente por su cédula. */
     @GET("api/reservas/{cedula}")
     suspend fun buscarReservasPorCedula(
         @Path("cedula") cedula: String
     ): Response<List<ModelMiReserva>>
 
-    /** Actualiza una reserva existente. */
     @PUT("api/reservas/{reserva_id}")
     suspend fun actualizarReserva(
         @Path("reserva_id") reservaId: Int,
         @Body body: ActualizarReservaRequest
     ): Response<ReservaResponse>
 
-    /** Elimina una reserva existente. */
     @DELETE("api/reservas/{reserva_id}")
     suspend fun eliminarReserva(
         @Path("reserva_id") reservaId: Int
@@ -60,13 +49,9 @@ interface ConexionServiceReserva {
 
     companion object {
 
-        /** URL base del servidor Flask de reservas. */
         const val BASE_URL = "http://147.182.238.195:5005/"
 
-        /**
-         * Interceptor de logging para depuración.
-         * Registra método, URL, body de request y response en Logcat.
-         */
+
         private val loggingInterceptor = Interceptor { chain ->
             val request = chain.request()
             val bodyStr = request.body()?.let { body ->
@@ -85,11 +70,6 @@ interface ConexionServiceReserva {
             response
         }
 
-        /**
-         * Cliente OkHttp con configuración anti-Flask:
-         * pool vacío + Connection: close + logging interceptor.
-         * Timeouts más amplios porque POST /api/reservas puede demorar.
-         */
         private val okHttpClient: OkHttpClient by lazy {
             OkHttpClient.Builder()
                 .connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
@@ -108,7 +88,6 @@ interface ConexionServiceReserva {
                 .build()
         }
 
-        /** Instancia singleton de la interfaz Retrofit lista para usar. */
         val instance: ConexionServiceReserva by lazy {
             Retrofit.Builder()
                 .baseUrl(BASE_URL)

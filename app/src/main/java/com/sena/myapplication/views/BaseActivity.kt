@@ -16,27 +16,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.sena.myapplication.R
 
-/**
- * Clase base para todas las Activities de la aplicación.
- *
- * Principio OCP (Open/Closed): Las Activities hijas extienden esta clase
- * para heredar la barra de navegación y utilidades compartidas sin modificarla.
- *
- * Principio DRY: Centraliza la lógica de navegación inferior, el diálogo
- * selector genérico y utilidades de archivos/imágenes que comparten
- * múltiples pantallas (ReservaActivity, DomicilioActivity, MisReservasActivity).
- *
- * Uso: Llamar a [configurarBarraNavegacion] después de [setContentView].
- */
 open class BaseActivity : AppCompatActivity() {
 
-    /**
-     * Vincula los botones de la barra de navegación inferior y define
-     * su comportamiento. Debe llamarse después de [setContentView].
-     *
-     * Si algún botón no existe en el layout actual, la función
-     * retorna sin error (protección con safe-call ?:).
-     */
     protected fun configurarBarraNavegacion() {
         val btnCasa         = findViewById<ImageButton?>(R.id.btnCasa)         ?: return
         val btnCarrito      = findViewById<ImageButton?>(R.id.btnCarrito)      ?: return
@@ -64,19 +45,6 @@ open class BaseActivity : AppCompatActivity() {
 
     // ==================== DIÁLOGO SELECTOR GENÉRICO ====================
 
-    /**
-     * Muestra un diálogo personalizado con una lista de opciones y selección visual.
-     * Reutilizado por todos los selectores (bloque horario, piso, método de pago,
-     * temática) en múltiples Activities.
-     *
-     * Principio DRY: Una sola implementación para todos los diálogos de selección
-     * en la aplicación, evitando duplicación en Activities hijas.
-     *
-     * @param titulo Título del diálogo.
-     * @param opciones Lista de textos a mostrar como opciones.
-     * @param indiceActual Índice actualmente seleccionado (-1 si ninguno).
-     * @param alSeleccionar Lambda que recibe el índice y texto seleccionados.
-     */
     protected fun mostrarDialogoSelector(
         titulo: String,
         opciones: List<String>,
@@ -142,15 +110,6 @@ open class BaseActivity : AppCompatActivity() {
 
     // ==================== UTILIDADES DE ARCHIVOS ====================
 
-    /**
-     * Codifica una imagen desde su URI a una cadena Base64.
-     * Lee los bytes a través del ContentResolver y los convierte.
-     *
-     * Principio SRP: Método utilitario puro — solo transforma URI → Base64.
-     *
-     * @param uri URI de la imagen a codificar.
-     * @return String en Base64 o null si ocurre un error de lectura.
-     */
     protected fun codificarImagenBase64(uri: Uri): String? {
         return try {
             val inputStream = contentResolver.openInputStream(uri) ?: return null
@@ -163,13 +122,6 @@ open class BaseActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Obtiene el nombre legible del archivo desde una URI de contenido.
-     * Intenta extraerlo del cursor de MediaStore; si no, retorna un texto genérico.
-     *
-     * @param uri URI del archivo seleccionado.
-     * @return Nombre del archivo o "Comprobante seleccionado" como fallback.
-     */
     protected fun obtenerNombreArchivo(uri: Uri): String {
         var nombre = "Comprobante seleccionado"
         contentResolver.query(uri, null, null, null, null)?.use { cursor ->

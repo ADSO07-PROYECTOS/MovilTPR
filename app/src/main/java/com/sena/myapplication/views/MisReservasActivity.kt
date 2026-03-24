@@ -23,19 +23,6 @@ import com.sena.myapplication.viewmodels.ViewModelMisReservas
 import java.util.Calendar
 import java.util.Locale
 
-/**
- * Pantalla "Mis Reservas" — Permite buscar reservas por cédula,
- * ver los detalles con QR, editar y eliminar.
- *
- * Principio SRP: Solo gestiona la UI de consulta/edición/eliminación.
- * Las operaciones de red se delegan a [ViewModelMisReservas] y [ViewModelReserva].
- *
- * Principio OCP: Hereda [mostrarDialogoSelector] de [BaseActivity]
- * para los selectores del diálogo de edición, sin reimplementarlo.
- *
- * Principio DIP: Depende de las abstracciones [ViewModelMisReservas]
- * y [ViewModelReserva], no de llamadas Retrofit directas.
- */
 class MisReservasActivity : BaseActivity() {
 
     private lateinit var binding: ActivityMisReservasBinding

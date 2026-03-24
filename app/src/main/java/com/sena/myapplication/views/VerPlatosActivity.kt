@@ -10,20 +10,7 @@ import com.sena.myapplication.databinding.ActivityVerPlatosBinding
 import com.sena.myapplication.models.ModelPlato
 import com.sena.myapplication.viewmodels.ViewModelPlato
 
-/**
- * Pantalla de platos por categoría — Lista los platos disponibles.
- *
- * Principio SRP: Solo gestiona la UI de listado de platos.
- * La carga de datos se delega a [ViewModelPlato].
- *
- * Principio DIP: Depende de la abstracción [ViewModelPlato],
- * no de llamadas Retrofit directas.
- *
- * Principio OCP: Hereda la barra de navegación de [BaseActivity].
- *
- * El usuario selecciona un plato para ver sus detalles (tamaño, sabor, adiciones).
- * Recibe ID_CATEGORIA y NOMBRE_CATEGORIA como extras del Intent.
- */
+
 class VerPlatosActivity : BaseActivity() {
 
     private lateinit var binding: ActivityVerPlatosBinding
@@ -68,10 +55,6 @@ class VerPlatosActivity : BaseActivity() {
         }
     }
 
-    /**
-     * Navega al detalle del plato seleccionado.
-     * Pasa los datos básicos del plato como extras del Intent.
-     */
     private fun abrirDetalle(plato: ModelPlato) {
         val intent = Intent(this, PlatoDetalleActivity::class.java).apply {
             putExtra("ID_PLATO",          plato.id)

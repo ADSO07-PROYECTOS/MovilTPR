@@ -10,15 +10,6 @@ import com.sena.myapplication.models.DomicilioResponse
 import com.sena.myapplication.services.ConexionServiceDomicilio
 import kotlinx.coroutines.launch
 
-/**
- * ViewModel para la pantalla de domicilio (DomicilioActivity).
- *
- * Gestiona el envío del pedido a domicilio vía POST /api/domicilios
- * al microservicio Flask en puerto 5004.
- *
- * Principio SRP: Solo se encarga de la lógica de red del domicilio.
- * Principio DIP: Depende de la interfaz [ConexionServiceDomicilio].
- */
 class ViewModelDomicilio : ViewModel() {
 
     private val api = ConexionServiceDomicilio.instance
@@ -38,7 +29,6 @@ class ViewModelDomicilio : ViewModel() {
     // Crear domicilio
     // ------------------------------------------------------------------
 
-    /** Envía el pedido a domicilio al servidor con reintentos automáticos. */
     fun crearDomicilio(body: DomicilioRequest) {
         _enviando.value = true
         _error.value = null

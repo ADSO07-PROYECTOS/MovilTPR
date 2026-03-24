@@ -12,20 +12,6 @@ import com.sena.myapplication.models.ReservaResponse
 import com.sena.myapplication.services.ConexionServiceMisReservas
 import kotlinx.coroutines.launch
 
-/**
- * ViewModel para la pantalla "Mis Reservas" (MisReservasActivity).
- *
- * Gestiona: buscar reservas por cédula, actualizar y eliminar.
- *
- * Principio SRP: Encapsula toda la lógica de red de consulta/edición/eliminación
- * de reservas, dejando la Activity enfocada solo en la UI.
- *
- * Principio DIP (Dependency Inversion): Depende de la interfaz
- * [ConexionServiceMisReservas] y no de una implementación concreta de Retrofit.
- *
- * Usa coroutines con [viewModelScope] para llamadas asíncronas.
- * Implementa reintento automático (máx. 2) ante fallos de red.
- */
 class ViewModelMisReservas : ViewModel() {
 
     private val api = ConexionServiceMisReservas.instance
@@ -57,7 +43,6 @@ class ViewModelMisReservas : ViewModel() {
     // Cargar temáticas (puerto 5007)
     // ------------------------------------------------------------------
 
-    /** Solicita la lista de temáticas con reintentos automáticos. */
     fun cargarTematicas() {
         cargarTematicasConReintento(intentos = 0)
     }

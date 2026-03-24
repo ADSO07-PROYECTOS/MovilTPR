@@ -52,10 +52,6 @@ data class ModelMiReserva(
     fun extraerFecha(): String =
         if (fechaHora.length >= 10) fechaHora.substring(0, 10) else fechaHora
 
-    /**
-     * Extrae solo la hora (entero) de [fechaHora].
-     * Ejemplo: "2026-03-24 07:00:00" → "7"
-     */
     fun extraerHora(): String {
         if (fechaHora.length >= 13) {
             val h = fechaHora.substring(11, 13).trimStart('0')
@@ -65,25 +61,12 @@ data class ModelMiReserva(
     }
 }
 
-/**
- * Detalle de un producto en el pedido de la reserva.
- *
- * Principio SRP: Responsabilidad única de representar un item del pedido.
- * Usa valores por defecto para evitar crashes si el backend omite campos.
- */
 data class PedidoDetalle(
     @SerializedName("nombre_producto") val nombre: String = "",
     @SerializedName("cantidad")        val cantidad: Int = 0,
     @SerializedName("notas")           val notas: String? = null
 )
 
-/**
- * Body para actualizar una reserva existente.
- * Endpoint: PUT /api/mis_reservas/{id_reserva} (puerto 5007)
- *
- * Principio SRP: Responsabilidad única de transportar los datos de edición.
- * Las claves @SerializedName coinciden con lo que espera la ruta Flask.
- */
 data class ActualizarReservaRequest(
     @SerializedName("fecha_hora") val fechaHora: String,
     @SerializedName("personas")   val personas: Int,

@@ -22,23 +22,6 @@ import java.text.NumberFormat
 import java.util.Calendar
 import java.util.Locale
 
-/**
- * Pantalla de reserva — El usuario selecciona fecha, hora, temática,
- * piso, método de pago y número de personas.
- *
- * Principio SRP: Solo gestiona la UI del formulario de reserva.
- * Toda la lógica de red (cargar temáticas, enviar reserva) se delega
- * a [ViewModelReserva].
- *
- * Principio OCP: Hereda [mostrarDialogoSelector], [codificarImagenBase64]
- * y [obtenerNombreArchivo] de [BaseActivity] sin modificarlos.
- *
- * Principio DIP: Depende de la abstracción [ViewModelReserva],
- * no de llamadas Retrofit directas.
- *
- * Recibe datos del cliente (CLI_*) y del carrito (CARRITO_*) para
- * construir el [ReservaRequest] completo.
- */
 class ReservaActivity : BaseActivity() {
 
     private lateinit var binding: ActivityReservaBinding
@@ -275,17 +258,7 @@ class ReservaActivity : BaseActivity() {
 
     // ==================== DIÁLOGO TRANSFERENCIA ====================
 
-    /**
-     * Muestra un diálogo personalizado con los datos bancarios para
-     * realizar la transferencia, similar a la versión web.
-     *
-     * Incluye: datos de cuenta, advertencia, total, zona para adjuntar
-     * comprobante y botón de envío.
-     * Usa [codificarImagenBase64] y [obtenerNombreArchivo] heredados de [BaseActivity].
-     *
-     * @param total Monto total a pagar.
-     * @param alConfirmar Lambda que se ejecuta cuando el usuario confirma el envío.
-     */
+
     private fun mostrarDialogoTransferencia(total: Double, alConfirmar: (String) -> Unit) {
         comprobanteUri = null // Resetear comprobante anterior
 
@@ -338,7 +311,6 @@ class ReservaActivity : BaseActivity() {
 
 
     companion object {
-        /** Número máximo de personas permitido por reserva. */
         private const val MAX_PERSONAS = 10
     }
 }

@@ -11,21 +11,7 @@ import com.sena.myapplication.models.ModelTamano
 import com.sena.myapplication.services.ConexionServiceMenu
 import kotlinx.coroutines.launch
 
-/**
- * ViewModel para la pantalla de detalle de plato (PlatoDetalleActivity).
- *
- * Carga los extras (tamaños, sabores, adiciones) desde /api/extras
- * y los expone como LiveData independientes.
- *
- * Principio SRP: Solo se encarga de los extras del plato.
- * Principio OCP: Si se añaden nuevos tipos de extra, solo se
- * agrega un nuevo LiveData sin modificar los existentes.
- * Principio DIP: Depende de la interfaz [ConexionServiceMenu]
- * y no de una implementación concreta de Retrofit.
- *
- * Usa coroutines con [viewModelScope] para llamadas asíncronas.
- * Implementa reintento automático (máx. 2) ante fallos de red.
- */
+
 class ViewModelPlatoDetalle : ViewModel() {
 
     private val api = ConexionServiceMenu.instance

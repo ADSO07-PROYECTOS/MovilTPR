@@ -174,21 +174,6 @@
         android:layout_marginTop="20dp"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/carrito_metodo_pago"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/carrito_efectivo"
-            android:textColor="#CCCCCC"
-            android:textSize="12sp"
-            android:layout_marginTop="2dp" />
 
         <!-- Línea separadora -->
         <View

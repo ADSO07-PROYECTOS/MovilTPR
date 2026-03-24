@@ -5,23 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import com.sena.myapplication.databinding.ActivityDatosClienteBinding
 
-/**
- * Pantalla de datos del cliente — Formulario para recopilar nombre,
- * cédula, correo y teléfono antes de continuar con la reserva o domicilio.
- *
- * Principio SRP: Solo gestiona la recopilación y validación de datos
- * del cliente. No realiza llamadas de red.
- *
- * Principio OCP: Hereda la barra de navegación de [BaseActivity].
- * Las validaciones se encapsulan en [validarCamposObligatorios] para
- * facilitar su extensión sin modificar el flujo principal.
- *
- * Recibe datos del carrito (prefijo CARRITO_*) y un flag FLUJO_DOMICILIO
- * que determina si el siguiente paso es ReservaActivity o DomicilioActivity.
- *
- * Implementa validaciones de campos vacíos, formato numérico,
- * formato de correo y aceptación obligatoria del checkbox de Habeas Data.
- */
+
 class DatosClienteActivity : BaseActivity() {
 
     private lateinit var binding: ActivityDatosClienteBinding

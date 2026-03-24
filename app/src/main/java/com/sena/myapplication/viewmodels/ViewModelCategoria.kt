@@ -9,18 +9,7 @@ import com.sena.myapplication.models.ModelCategoria
 import com.sena.myapplication.services.ConexionServiceMenu
 import kotlinx.coroutines.launch
 
-/**
- * ViewModel para la pantalla de categorías (MainActivity).
- *
- * Principio SRP: Solo gestiona la obtención y exposición reactiva
- * de la lista de categorías.
- *
- * Principio DIP (Dependency Inversion): Depende de la interfaz
- * [ConexionServiceMenu] y no de una implementación concreta de Retrofit.
- *
- * Usa coroutines con [viewModelScope] para llamadas asíncronas.
- * Implementa reintento automático (máx. 2) ante fallos de red.
- */
+
 class ViewModelCategoria : ViewModel() {
 
     // ------------------------------------------------------------------
@@ -44,7 +33,6 @@ class ViewModelCategoria : ViewModel() {
     // Métodos públicos
     // ------------------------------------------------------------------
 
-    /** Solicita las categorías al servidor con reintentos automáticos. */
     fun obtenerCategorias() {
         _cargando.value = true
         _error.value = null
@@ -55,10 +43,6 @@ class ViewModelCategoria : ViewModel() {
     // Lógica privada — Coroutine con reintento
     // ------------------------------------------------------------------
 
-    /**
-     * Ejecuta la llamada suspendida dentro de [viewModelScope].
-     * Si falla por red, reintenta hasta [MAX_REINTENTOS] veces.
-     */
     private fun realizarLlamada(intentos: Int) {
         viewModelScope.launch {
             try {

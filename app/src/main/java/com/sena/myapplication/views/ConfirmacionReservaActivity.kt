@@ -14,20 +14,7 @@ import com.sena.myapplication.databinding.ActivityConfirmacionReservaBinding
 import java.io.File
 import java.io.FileOutputStream
 
-/**
- * Pantalla de confirmación — Muestra el código QR de la reserva/domicilio.
- *
- * Principio SRP: Solo gestiona la decodificación y presentación del QR,
- * junto con la funcionalidad de descarga a galería.
- *
- * Principio OCP: Hereda la barra de navegación de [BaseActivity].
- * La lógica de guardado en galería se adapta según la versión de Android
- * (MediaStore para API 29+, escritura directa para versiones anteriores).
- *
- * Recibe el QR en formato Base64 vía Intent extra "QR_BASE64".
- * Permite descargar el QR a la galería del dispositivo.
- * El botón "Finalizar" limpia la pila de Activities y vuelve al inicio.
- */
+
 class ConfirmacionReservaActivity : BaseActivity() {
 
     private lateinit var binding: ActivityConfirmacionReservaBinding

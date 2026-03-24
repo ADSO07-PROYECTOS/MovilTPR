@@ -11,18 +11,7 @@ import com.sena.myapplication.models.ReservaResponse
 import com.sena.myapplication.services.ConexionServiceReserva
 import kotlinx.coroutines.launch
 
-/**
- * ViewModel para la pantalla de reserva (ReservaActivity).
- *
- * Gestiona dos operaciones:
- * 1. Cargar temáticas desde GET /api/tematicas
- * 2. Crear una reserva con POST /api/reservas
- *
- * Principio SRP: Encapsula toda la lógica de red de reservas,
- * dejando la Activity enfocada solo en la UI.
- *
- * Principio DIP: Depende de la interfaz [ConexionServiceReserva].
- */
+
 class ViewModelReserva : ViewModel() {
 
     private val api = ConexionServiceReserva.instance
@@ -76,7 +65,6 @@ class ViewModelReserva : ViewModel() {
     // Crear reserva
     // ------------------------------------------------------------------
 
-    /** Envía la reserva al servidor con reintentos automáticos. */
     fun crearReserva(body: ReservaRequest) {
         _enviando.value = true
         _error.value = null

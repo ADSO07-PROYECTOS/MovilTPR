@@ -10,24 +10,8 @@ import com.sena.myapplication.databinding.ActivityMain3Binding
 import com.sena.myapplication.models.ModelCategoria
 import com.sena.myapplication.viewmodels.ViewModelCategoria
 
-/**
- * Pantalla principal — Muestra la grilla de categorías del menú.
- *
- * Punto de entrada de la app (launcher). El usuario selecciona una
- * categoría para ver los platos disponibles.
- *
- * Principio SRP: La Activity solo observa el LiveData del ViewModel
- * y actualiza la UI. No contiene lógica de negocio ni llamadas de red.
- *
- * Principio DIP: Depende de la abstracción [ViewModelCategoria],
- * no de llamadas Retrofit directas.
- *
- * Principio OCP: Hereda la barra de navegación de [BaseActivity]
- * sin modificarla.
- */
 class MainActivity : BaseActivity() {
 
-    /** ViewBinding generado desde activity_main3.xml. */
     private lateinit var binding: ActivityMain3Binding
 
     private lateinit var adapter: AdapterCategoria
@@ -63,10 +47,7 @@ class MainActivity : BaseActivity() {
         viewModel.obtenerCategorias()
     }
 
-    /**
-     * Navega a la pantalla de platos de la categoría seleccionada.
-     * Pasa ID y nombre como extras del Intent.
-     */
+
     private fun abrirPlatos(categoria: ModelCategoria) {
         val intent = Intent(this, VerPlatosActivity::class.java).apply {
             putExtra("ID_CATEGORIA", categoria.id)
