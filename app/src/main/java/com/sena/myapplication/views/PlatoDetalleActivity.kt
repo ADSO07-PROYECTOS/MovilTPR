@@ -9,6 +9,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
+import com.sena.myapplication.models.CarritoGlobal
+import com.sena.myapplication.models.ModelCarritoItem
 import com.sena.myapplication.R
 import com.sena.myapplication.databinding.PlatoDetalleBinding
 import com.sena.myapplication.models.ModelTamano
@@ -106,13 +108,27 @@ class PlatoDetalleActivity : BaseActivity() {
                 binding.btnSeleccionarTamano.text.toString()
             else ""
 
+            val precioUnitarioFinal = precioTamanoSeleccionado + precioAdicionesTotal
+
+            // Guardar en el carrito global para acceso desde cualquier pantalla
+            CarritoGlobal.guardar(
+                ModelCarritoItem(
+                    idPlato        = idPlato,
+                    nombrePlato    = nombrePlato,
+                    nombreTamano   = tamanoNombre,
+                    cantidad       = cantidad,
+                    precioUnitario = precioUnitarioFinal,
+                    precioTotal    = precioUnitarioFinal * cantidad
+                )
+            )
+
             val intent = Intent(this, CarritoActivity::class.java).apply {
                 putExtra("CARRITO_ID_PLATO",        idPlato)
                 putExtra("CARRITO_NOMBRE",          nombrePlato)
                 putExtra("CARRITO_TAMANO",          tamanoNombre)
                 putExtra("CARRITO_CANTIDAD",        cantidad)
-                putExtra("CARRITO_PRECIO_UNITARIO", precioTamanoSeleccionado + precioAdicionesTotal)
-                putExtra("CARRITO_PRECIO_TOTAL",    (precioTamanoSeleccionado + precioAdicionesTotal) * cantidad)
+                putExtra("CARRITO_PRECIO_UNITARIO", precioUnitarioFinal)
+                putExtra("CARRITO_PRECIO_TOTAL",    precioUnitarioFinal * cantidad)
             }
             startActivity(intent)
         }

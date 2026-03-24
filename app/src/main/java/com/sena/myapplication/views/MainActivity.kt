@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sena.myapplication.adapters.AdapterCategoria
 import com.sena.myapplication.databinding.ActivityMain3Binding
+import com.sena.myapplication.models.CarritoGlobal
 import com.sena.myapplication.models.ModelCategoria
 import com.sena.myapplication.viewmodels.ViewModelCategoria
 
@@ -45,6 +46,31 @@ class MainActivity : BaseActivity() {
 
         // Disparar la carga inicial de categorías
         viewModel.obtenerCategorias()
+
+        // --- Botones de Reservar y Domicilio ---
+        binding.btnReservar.setOnClickListener {
+            val intent = Intent(this, DatosClienteActivity::class.java).apply {
+                putExtra("FLUJO_DOMICILIO", false)
+            }
+            startActivity(intent)
+        }
+
+        binding.btnDomicilio.setOnClickListener {
+            if (!CarritoGlobal.tieneProducto()) {
+                Toast.makeText(this, "Primero debes agregar un producto al carrito", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val item = CarritoGlobal.obtener()!!
+            val intent = Intent(this, DatosClienteActivity::class.java).apply {
+                putExtra("CARRITO_ID_PLATO",        item.idPlato)
+                putExtra("CARRITO_NOMBRE",          item.nombrePlato)
+                putExtra("CARRITO_TAMANO",          item.nombreTamano)
+                putExtra("CARRITO_CANTIDAD",        item.cantidad)
+                putExtra("CARRITO_PRECIO_UNITARIO", item.precioUnitario)
+                putExtra("FLUJO_DOMICILIO",         true)
+            }
+            startActivity(intent)
+        }
     }
 
 

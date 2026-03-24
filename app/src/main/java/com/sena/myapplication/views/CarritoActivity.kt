@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.sena.myapplication.R
 import com.sena.myapplication.databinding.ActivityCarritoBinding
+import com.sena.myapplication.models.CarritoGlobal
 
 
 class CarritoActivity : BaseActivity() {
@@ -20,12 +21,22 @@ class CarritoActivity : BaseActivity() {
         setContentView(binding.root)
         configurarBarraNavegacion()
 
-        // --- Recibir datos del plato desde el Intent ---
-        val idPlato        = intent.getIntExtra("CARRITO_ID_PLATO", -1)
-        val nombrePlato    = intent.getStringExtra("CARRITO_NOMBRE")    ?: ""
-        val nombreTamano   = intent.getStringExtra("CARRITO_TAMANO")    ?: ""
-        val cantidad       = intent.getIntExtra("CARRITO_CANTIDAD", 1)
-        val precioUnitario = intent.getDoubleExtra("CARRITO_PRECIO_UNITARIO", 0.0)
+        // --- Recibir datos del plato: primero del Intent, si no del CarritoGlobal ---
+        var idPlato        = intent.getIntExtra("CARRITO_ID_PLATO", -1)
+        var nombrePlato    = intent.getStringExtra("CARRITO_NOMBRE")    ?: ""
+        var nombreTamano   = intent.getStringExtra("CARRITO_TAMANO")    ?: ""
+        var cantidad       = intent.getIntExtra("CARRITO_CANTIDAD", 1)
+        var precioUnitario = intent.getDoubleExtra("CARRITO_PRECIO_UNITARIO", 0.0)
+
+        // Si no llegó nada por Intent, intentar recuperar del carrito global
+        if (idPlato == -1 && CarritoGlobal.tieneProducto()) {
+            val saved = CarritoGlobal.obtener()!!
+            idPlato        = saved.idPlato
+            nombrePlato    = saved.nombrePlato
+            nombreTamano   = saved.nombreTamano
+            cantidad       = saved.cantidad
+            precioUnitario = saved.precioUnitario
+        }
 
         // --- Si no hay plato en el carrito, mostrar estado vacío ---
         if (idPlato == -1) {

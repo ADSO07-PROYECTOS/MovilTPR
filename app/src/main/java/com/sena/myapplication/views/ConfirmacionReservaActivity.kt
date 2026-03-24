@@ -11,6 +11,7 @@ import android.provider.MediaStore
 import android.util.Base64
 import android.widget.Toast
 import com.sena.myapplication.databinding.ActivityConfirmacionReservaBinding
+import com.sena.myapplication.models.CarritoGlobal
 import java.io.File
 import java.io.FileOutputStream
 
@@ -47,6 +48,7 @@ class ConfirmacionReservaActivity : BaseActivity() {
 
         // --- Botón Finalizar: Volver al inicio limpiando toda la pila ---
         binding.btnFinalizar.setOnClickListener {
+            CarritoGlobal.limpiar()
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
