@@ -2,9 +2,8 @@ package com.sena.myapplication.services
 
 import android.util.Log
 import com.sena.myapplication.models.ActualizarReservaRequest
-import com.sena.myapplication.models.ModelMiReserva
+import com.sena.myapplication.models.MisReservasResponse
 import com.sena.myapplication.models.ModelTematica
-import com.sena.myapplication.models.ReservaRequest
 import com.sena.myapplication.models.ReservaResponse
 import okhttp3.ConnectionPool
 import okhttp3.Interceptor
@@ -16,52 +15,51 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
 
 /**
- * Interfaz de conexión Retrofit para el API de reservas (puerto 5005).
+ * Interfaz de conexión Retrofit para el microservicio de "Mis Reservas" (puerto 5007).
  *
- * Principio ISP: Solo endpoints de reservas y temáticas.
+ * Principio ISP: Solo endpoints de consulta, edición y eliminación de reservas.
  * Principio SRP: El companion object concentra la configuración de red
  * para este servicio específico.
  */
-interface ConexionServiceReserva {
+interface ConexionServiceMisReservas {
 
-    /** Obtiene la lista de temáticas disponibles para reservar. */
-    @GET("api/tematicas")
-    suspend fun obtenerTematicas(): Response<List<ModelTematica>>
-
-    /** Crea una nueva reserva con datos de cliente, reserva y pedido. */
-    @POST("api/reservas")
-    suspend fun crearReserva(@Body body: ReservaRequest): Response<ReservaResponse>
-
-    /** Consulta las reservas de un cliente por su cédula. */
-    @GET("api/reservas/{cedula}")
+    /**
+     * Consulta las reservas de un cliente por su cédula.
+     * Retorna un wrapper con la lista de reservas y un flag sin_resultados.
+     */
+    @GET("api/mis_reservas")
     suspend fun buscarReservasPorCedula(
-        @Path("cedula") cedula: String
-    ): Response<List<ModelMiReserva>>
+        @Query("cedula") cedula: String
+    ): Response<MisReservasResponse>
 
     /** Actualiza una reserva existente. */
-    @PUT("api/reservas/{reserva_id}")
+    @PUT("api/mis_reservas/{id_reserva}")
     suspend fun actualizarReserva(
-        @Path("reserva_id") reservaId: Int,
+        @Path("id_reserva") reservaId: Int,
         @Body body: ActualizarReservaRequest
     ): Response<ReservaResponse>
 
     /** Elimina una reserva existente. */
-    @DELETE("api/reservas/{reserva_id}")
+    @DELETE("api/mis_reservas/{id_reserva}")
     suspend fun eliminarReserva(
-        @Path("reserva_id") reservaId: Int
+        @Path("id_reserva") reservaId: Int
     ): Response<ReservaResponse>
+
+    /** Obtiene la lista de temáticas para el selector de edición. */
+    @GET("api/tematicas")
+    suspend fun obtenerTematicas(): Response<List<ModelTematica>>
 
 
     companion object {
 
-        /** URL base del servidor Flask de reservas. */
-        const val BASE_URL = "http://147.182.238.195:5005/"
+        /** URL base del microservicio Flask de mis reservas. */
+        const val BASE_URL = "http://147.182.238.195:5007/"
 
         /**
          * Interceptor de logging para depuración.
@@ -74,13 +72,13 @@ interface ConexionServiceReserva {
                 body.writeTo(buffer)
                 buffer.readUtf8()
             } ?: "null"
-            Log.d("ReservaAPI", ">>> ${request.method()} ${request.url()}")
-            Log.d("ReservaAPI", ">>> Body: $bodyStr")
+            Log.d("MisReservasAPI", ">>> ${request.method()} ${request.url()}")
+            Log.d("MisReservasAPI", ">>> Body: $bodyStr")
 
             val response = chain.proceed(request)
             val responseBody = response.peekBody(Long.MAX_VALUE).string()
-            Log.d("ReservaAPI", "<<< ${response.code()} ${response.message()}")
-            Log.d("ReservaAPI", "<<< Body: $responseBody")
+            Log.d("MisReservasAPI", "<<< ${response.code()} ${response.message()}")
+            Log.d("MisReservasAPI", "<<< Body: $responseBody")
 
             response
         }
@@ -88,7 +86,6 @@ interface ConexionServiceReserva {
         /**
          * Cliente OkHttp con configuración anti-Flask:
          * pool vacío + Connection: close + logging interceptor.
-         * Timeouts más amplios porque POST /api/reservas puede demorar.
          */
         private val okHttpClient: OkHttpClient by lazy {
             OkHttpClient.Builder()
@@ -109,13 +106,13 @@ interface ConexionServiceReserva {
         }
 
         /** Instancia singleton de la interfaz Retrofit lista para usar. */
-        val instance: ConexionServiceReserva by lazy {
+        val instance: ConexionServiceMisReservas by lazy {
             Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(ConexionServiceReserva::class.java)
+                .create(ConexionServiceMisReservas::class.java)
         }
     }
 }

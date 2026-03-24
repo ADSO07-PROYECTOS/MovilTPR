@@ -22,6 +22,15 @@
             android:gravity="center"
             android:padding="28dp">
 
+            <!-- Logo Sabores Unidos -->
+            <ImageView
+                android:layout_width="140dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="16dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/saboresunidos"
+                android:contentDescription="Sabores Unidos" />
+
             <!-- Título ¡LISTO! -->
             <TextView
                 android:layout_width="wrap_content"
@@ -49,8 +58,25 @@
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:scaleType="fitCenter"
-                android:layout_marginBottom="28dp"
+                android:layout_marginBottom="16dp"
                 android:contentDescription="Código QR" />
+
+            <!-- Botón DESCARGAR QR -->
+            <Button
+                android:id="@+id/btnDescargarQr"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:backgroundTint="#FFFFFF"
+                android:text="DESCARGAR QR"
+                android:textColor="#A51D21"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05"
+                app:cornerRadius="24dp"
+                app:icon="@drawable/ic_descargar"
+                app:iconTint="#A51D21"
+                app:iconGravity="textStart"
+                android:layout_marginBottom="12dp" />
 
             <!-- Botón FINALIZAR -->
             <Button

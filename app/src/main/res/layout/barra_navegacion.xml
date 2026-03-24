@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_campana"
-        android:contentDescription="Notificaciones"
+        android:src="@drawable/ic_reserva"
+        android:contentDescription="Mis Reservas"
         app:tint="#A51D21" />
     </LinearLayout>

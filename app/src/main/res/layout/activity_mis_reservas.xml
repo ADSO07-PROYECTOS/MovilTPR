@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/tu_fondo_difuminado">
+
+    <!-- Botón atrás + título -->
+    <LinearLayout
+        android:id="@+id/headerMisReservas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="16dp">
+
+        <ImageButton
+            android:id="@+id/btnVolver"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_flecha_atras"
+            android:contentDescription="Volver" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="MIS RESERVAS"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:gravity="center" />
+
+        <View
+            android:layout_width="36dp"
+            android:layout_height="36dp" />
+    </LinearLayout>
+
+    <!-- Barra de búsqueda -->
+    <LinearLayout
+        android:id="@+id/layoutBuscador"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/headerMisReservas"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="20dp"
+        android:layout_marginBottom="16dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etCedulaBuscar"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@drawable/borde_spinner_oscuro"
+            android:hint="Ingresa tu cédula"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#99FFFFFF"
+            android:inputType="number"
+            android:maxLength="10"
+            android:paddingHorizontal="16dp"
+            android:textSize="15sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBuscar"
+            android:layout_width="52dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            android:backgroundTint="#A51D21"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            app:icon="@drawable/ic_buscar"
+            app:iconTint="#FFFFFF"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:cornerRadius="10dp" />
+    </LinearLayout>
+
+    <!-- Contenido principal (ScrollView) -->
+    <ScrollView
+        android:id="@+id/scrollContenido"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/layoutBuscador"
+        android:layout_above="@id/barraInferior"
+        android:fadeScrollbars="false"
+        android:paddingHorizontal="20dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="16dp">
+
+            <!-- Tarjeta principal de la reserva -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="#CC1A1A1A"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <!-- Fecha y hora -->
+                    <TextView
+                        android:id="@+id/tvFechaHora"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="MIÉRCOLES, 25 MARZO, 07:00 AM"
+                        android:textColor="#CCCCCC"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="4dp" />
+
+                    <!-- Mesa para X -->
+                    <TextView
+                        android:id="@+id/tvMesaPersonas"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="MESA PARA 2"
+                        android:textColor="#FFFFFF"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="2dp" />
+
+                    <!-- Temática -->
+                    <TextView
+                        android:id="@+id/tvTematica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="ANIVERSARIO"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="2dp" />
+
+                    <!-- Piso -->
+                    <TextView
+                        android:id="@+id/tvPiso"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="PISO 2"
+                        android:textColor="#99FFFFFF"
+                        android:textSize="13sp"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Separador -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#33FFFFFF"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Pedido -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="PEDIDO"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="4dp" />
+
+                    <TextView
+                        android:id="@+id/tvPedido"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Sin pedido asociado"
+                        android:textColor="#CCCCCC"
+                        android:textSize="13sp"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Separador -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#33FFFFFF"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- QR -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="CÓDIGO QR DE RESERVA"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="12dp" />
+
+                    <ImageView
+                        android:id="@+id/imgQrReserva"
+                        android:layout_width="180dp"
+                        android:layout_height="180dp"
+                        android:layout_gravity="center"
+                        android:scaleType="fitCenter"
+                        android:contentDescription="QR de la reserva" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Botones Editar / Eliminar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/btnEditar"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:backgroundTint="#A51D21"
+                    android:text="EDITAR"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    app:icon="@drawable/ic_editar"
+                    app:iconTint="#FFFFFF"
+                    app:iconGravity="textStart"
+                    app:cornerRadius="25dp" />
+
+                <Button
+                    android:id="@+id/btnEliminar"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    android:backgroundTint="#FFFFFF"
+                    android:text="ELIMINAR"
+                    android:textColor="#A51D21"
+                    android:textStyle="bold"
+                    app:icon="@drawable/ic_papelera"
+                    app:iconTint="#A51D21"
+                    app:iconGravity="textStart"
+                    app:cornerRadius="25dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Mensaje vacío -->
+    <TextView
+        android:id="@+id/tvSinReservas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layoutBuscador"
+        android:layout_above="@id/barraInferior"
+        android:gravity="center"
+        android:text="Busca tus reservas por cédula"
+        android:textColor="#99FFFFFF"
+        android:textSize="16sp"
+        android:visibility="visible" />
+
+    <!-- ProgressBar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:indeterminateTint="#A51D21" />
+
+    <!-- Barra navegación -->
+    <include
+        android:id="@+id/barraInferior"
+        layout="@layout/barra_navegacion"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>
+

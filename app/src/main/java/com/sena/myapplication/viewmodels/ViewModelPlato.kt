@@ -14,6 +14,12 @@ import kotlinx.coroutines.launch
  *
  * Principio SRP: Solo gestiona la obtención de platos de una categoría.
  * Cachea la última categoría cargada para evitar llamadas duplicadas.
+ *
+ * Principio DIP (Dependency Inversion): Depende de la interfaz
+ * [ConexionServiceMenu] y no de una implementación concreta de Retrofit.
+ *
+ * Usa coroutines con [viewModelScope] para llamadas asíncronas.
+ * Implementa reintento automático (máx. 2) ante fallos de red.
  */
 class ViewModelPlato : ViewModel() {
 

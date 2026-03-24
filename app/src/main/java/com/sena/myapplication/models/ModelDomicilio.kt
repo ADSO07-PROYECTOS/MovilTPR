@@ -26,8 +26,9 @@ data class DomicilioRequest(
  * al campo [direccion] antes de construir este objeto.
  */
 data class DatosDomicilio(
-    @SerializedName("direccion")   val direccion: String,
-    @SerializedName("metodo_pago") val metodoPago: String
+    @SerializedName("direccion")        val direccion: String,
+    @SerializedName("metodo_pago")      val metodoPago: String,
+    @SerializedName("comprobante_pago") val comprobantePago: String? = null
 )
 
 // ==================================================================

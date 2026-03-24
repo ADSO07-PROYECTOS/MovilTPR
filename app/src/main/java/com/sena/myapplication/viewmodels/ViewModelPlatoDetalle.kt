@@ -20,6 +20,11 @@ import kotlinx.coroutines.launch
  * Principio SRP: Solo se encarga de los extras del plato.
  * Principio OCP: Si se añaden nuevos tipos de extra, solo se
  * agrega un nuevo LiveData sin modificar los existentes.
+ * Principio DIP: Depende de la interfaz [ConexionServiceMenu]
+ * y no de una implementación concreta de Retrofit.
+ *
+ * Usa coroutines con [viewModelScope] para llamadas asíncronas.
+ * Implementa reintento automático (máx. 2) ante fallos de red.
  */
 class ViewModelPlatoDetalle : ViewModel() {
 

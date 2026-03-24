@@ -4,15 +4,14 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
 import android.view.Window
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import com.sena.myapplication.R
 import com.sena.myapplication.databinding.ActivityDomicilioBinding
@@ -21,16 +20,23 @@ import com.sena.myapplication.models.DatosDomicilio
 import com.sena.myapplication.models.DomicilioRequest
 import com.sena.myapplication.models.PedidoItem
 import com.sena.myapplication.viewmodels.ViewModelDomicilio
+import java.text.NumberFormat
+import java.util.Locale
 
 /**
  * Pantalla de envío a domicilio — Recopila dirección, barrio/referencia
  * y método de pago para completar el pedido.
  *
- * Recibe datos del cliente (CLI_*) y del carrito (CARRITO_*) vía Intent extras.
- * Al confirmar, envía el pedido vía [ViewModelDomicilio] a POST /api/domicilios.
+ * Principio SRP: Solo gestiona la UI del formulario de domicilio.
+ * La lógica de red se delega a [ViewModelDomicilio].
  *
- * Patrón MVVM: La Activity solo gestiona la UI; la lógica de red
- * se delega al ViewModel.
+ * Principio OCP: Hereda [mostrarDialogoSelector], [codificarImagenBase64]
+ * y [obtenerNombreArchivo] de [BaseActivity] sin modificarlos.
+ *
+ * Principio DIP: Depende de la abstracción [ViewModelDomicilio],
+ * no de llamadas Retrofit directas.
+ *
+ * Recibe datos del cliente (CLI_*) y del carrito (CARRITO_*) vía Intent extras.
  */
 class DomicilioActivity : BaseActivity() {
 
@@ -41,6 +47,22 @@ class DomicilioActivity : BaseActivity() {
     private val opcionesMetodoPago = listOf("Efectivo (Contra entrega)", "Transferencia")
     private var metodoPagoPos: Int = 0
     private var metodoPagoStr: String = "efectivo"
+
+    // Estado para el comprobante de transferencia
+    private var comprobanteUri: Uri? = null
+    private var dialogTransferenciaActivo: Dialog? = null
+
+    /** Launcher para seleccionar imagen del comprobante desde la galería */
+    private val selectorComprobante = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            comprobanteUri = it
+            // Usa método heredado de BaseActivity
+            dialogTransferenciaActivo?.findViewById<TextView>(R.id.tvNombreArchivo)?.text =
+                obtenerNombreArchivo(it)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,7 +110,7 @@ class DomicilioActivity : BaseActivity() {
         // --- Listeners ---
         binding.btnVolverDomicilio.setOnClickListener { finish() }
 
-        // Selector de método de pago con diálogo personalizado
+        // Selector de método de pago (usa mostrarDialogoSelector heredado de BaseActivity)
         binding.btnMetodoPago.setOnClickListener {
             mostrarDialogoSelector("Método de Pago", opcionesMetodoPago, metodoPagoPos) { pos, texto ->
                 metodoPagoPos = pos
@@ -132,8 +154,20 @@ class DomicilioActivity : BaseActivity() {
                 ) else emptyList()
             )
 
-            // Delegar al ViewModel (coroutines con reintento)
-            viewModel.crearDomicilio(body)
+            // Si es transferencia, mostrar diálogo con datos bancarios
+            if (metodoPagoStr == "transferencia") {
+                val total = carritoPrecio * carritoCantidad
+                mostrarDialogoTransferencia(total) { comprobanteBase64 ->
+                    // Reconstruir body con comprobante incluido
+                    val bodyConComprobante = body.copy(
+                        domicilio = body.domicilio.copy(comprobantePago = comprobanteBase64)
+                    )
+                    viewModel.crearDomicilio(bodyConComprobante)
+                }
+            } else {
+                // Efectivo: enviar directo
+                viewModel.crearDomicilio(body)
+            }
         }
     }
 
@@ -164,73 +198,59 @@ class DomicilioActivity : BaseActivity() {
         return true
     }
 
-    // ==================== DIÁLOGO SELECTOR GENÉRICO ====================
+    // ==================== DIÁLOGO TRANSFERENCIA ====================
 
     /**
-     * Muestra un diálogo personalizado con opciones seleccionables.
-     * Reutiliza el mismo layout [R.layout.dialog_selector_generico]
-     * que usa [ReservaActivity].
+     * Muestra un diálogo con los datos bancarios para transferencia,
+     * similar a la versión web del restaurante.
+     * Usa [codificarImagenBase64] y [obtenerNombreArchivo] heredados de [BaseActivity].
      *
-     * Principio DRY: Misma lógica de selector visual.
+     * @param total Monto total a pagar.
+     * @param alConfirmar Lambda que se ejecuta al confirmar el envío del comprobante.
      */
-    private fun mostrarDialogoSelector(
-        titulo: String,
-        opciones: List<String>,
-        indiceActual: Int,
-        alSeleccionar: (Int, String) -> Unit
-    ) {
+    private fun mostrarDialogoTransferencia(total: Double, alConfirmar: (String) -> Unit) {
+        comprobanteUri = null
+
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.dialog_selector_generico)
+        dialog.setContentView(R.layout.dialog_transferencia)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setDimAmount(0.85f)
+        dialogTransferenciaActivo = dialog
 
-        dialog.findViewById<TextView>(R.id.tvTituloDialogo).text = titulo
-        val contenedor = dialog.findViewById<LinearLayout>(R.id.contenedorOpciones)
+        val formato = NumberFormat.getNumberInstance(Locale("es", "CO"))
+        formato.maximumFractionDigits = 0
+        val totalFormateado = formato.format(total)
 
-        var indiceTemp = if (indiceActual == -1 && opciones.isNotEmpty()) 0 else indiceActual
-        val vistasFilas = mutableListOf<View>()
+        dialog.findViewById<TextView>(R.id.tvTotalPagar).text = "TOTAL A PAGAR: $ $totalFormateado"
 
-        for (i in opciones.indices) {
-            val vistaFila = LayoutInflater.from(this)
-                .inflate(R.layout.item_opcion_dialogo, contenedor, false)
-            val tvTexto  = vistaFila.findViewById<TextView>(R.id.tvTextoOpcion)
-            val imgCheck = vistaFila.findViewById<ImageButton>(R.id.imgCheckOpcion)
-
-            tvTexto.text = opciones[i]
-
-            if (i == indiceTemp) {
-                imgCheck.setImageResource(R.drawable.ic_radio_seleccionado)
-                tvTexto.setTextColor(Color.parseColor("#FFFFFF"))
-            } else {
-                imgCheck.setImageResource(R.drawable.ic_radio_vacio)
-                tvTexto.setTextColor(Color.parseColor("#99FFFFFF"))
-            }
-
-            vistaFila.setOnClickListener {
-                indiceTemp = i
-                vistasFilas.forEachIndexed { index, vista ->
-                    val img = vista.findViewById<ImageButton>(R.id.imgCheckOpcion)
-                    val txt = vista.findViewById<TextView>(R.id.tvTextoOpcion)
-
-                    if (index == indiceTemp) {
-                        img.setImageResource(R.drawable.ic_radio_seleccionado)
-                        txt.setTextColor(Color.parseColor("#FFFFFF"))
-                    } else {
-                        img.setImageResource(R.drawable.ic_radio_vacio)
-                        txt.setTextColor(Color.parseColor("#99FFFFFF"))
-                    }
-                }
-            }
-
-            contenedor.addView(vistaFila)
-            vistasFilas.add(vistaFila)
+        dialog.findViewById<LinearLayout>(R.id.layoutSeleccionarComprobante).setOnClickListener {
+            selectorComprobante.launch("image/*")
         }
 
-        dialog.findViewById<Button>(R.id.btnCancelarDialogo).setOnClickListener { dialog.dismiss() }
-        dialog.findViewById<Button>(R.id.btnAceptarDialogo).setOnClickListener {
-            if (indiceTemp != -1) alSeleccionar(indiceTemp, opciones[indiceTemp])
+        dialog.findViewById<Button>(R.id.btnEnviarComprobante).setOnClickListener {
+            val uri = comprobanteUri
+            if (uri == null) {
+                Toast.makeText(this, "Selecciona un comprobante de pago", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            // Codificar imagen a base64 (método heredado de BaseActivity)
+            val base64 = codificarImagenBase64(uri)
+            if (base64 == null) {
+                Toast.makeText(this, "Error al procesar la imagen", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             dialog.dismiss()
+            dialogTransferenciaActivo = null
+            alConfirmar(base64)
         }
+
+        dialog.findViewById<Button>(R.id.btnCancelarTransferencia).setOnClickListener {
+            dialog.dismiss()
+            dialogTransferenciaActivo = null
+        }
+
+        dialog.setOnDismissListener { dialogTransferenciaActivo = null }
         dialog.show()
     }
 }

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="340dp"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="#00000000"
+    app:cardCornerRadius="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/fondo_dialogo_transferencia"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Logo Sabores Unidos -->
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/saboresunidos"
+            android:contentDescription="Sabores Unidos" />
+
+        <!-- Título -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="PAGO POR TRANSFERENCIA"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp" />
+
+        <!-- Instrucciones -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Por favor, realizar la transferencia con los siguientes datos. Una vez hecha, subir el comprobante de pago."
+            android:textColor="#CCFFFFFF"
+            android:textSize="12sp"
+            android:layout_marginBottom="14dp" />
+
+        <!-- Tarjeta datos bancarios -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/fondo_seccion_transferencia"
+            android:orientation="vertical"
+            android:padding="14dp"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="DATOS TRANSFERENCIA"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Banco: Bancolombia"
+                android:textColor="#E0E0E0"
+                android:textSize="13sp"
+                android:layout_marginBottom="2dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tipo de cuenta: Ahorros"
+                android:textColor="#E0E0E0"
+                android:textSize="13sp"
+                android:layout_marginBottom="2dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nombre del titular: Sabores Unidos"
+                android:textColor="#E0E0E0"
+                android:textSize="13sp"
+                android:layout_marginBottom="2dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="C.C/NIT: 900.127.215.20"
+                android:textColor="#E0E0E0"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <!-- Advertencia -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/fondo_seccion_transferencia"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="12dp"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ADVERTENCIA"
+                    android:textColor="#FFEB3B"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="4dp"
+                    android:src="@drawable/ic_alerta"
+                    android:contentDescription="Advertencia" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Una vez confirmado el pedido no se hacen devoluciones. El comprobante debe coincidir con el valor total del pedido."
+                android:textColor="#CCFFFFFF"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Total a pagar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/fondo_seccion_transferencia"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="14dp"
+            android:layout_marginBottom="14dp">
+
+            <TextView
+                android:id="@+id/tvTotalPagar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="TOTAL A PAGAR: $ 0"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Zona para seleccionar comprobante -->
+            <LinearLayout
+                android:id="@+id/layoutSeleccionarComprobante"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/borde_dashed"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_subir_archivo"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="Subir" />
+
+                <TextView
+                    android:id="@+id/tvNombreArchivo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Seleccionar comprobante (PNG, JPG)"
+                    android:textColor="#CCFFFFFF"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Botón Enviar Comprobante -->
+        <Button
+            android:id="@+id/btnEnviarComprobante"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:backgroundTint="#A51D21"
+            android:text="ENVIAR COMPROBANTE"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            app:cornerRadius="25dp"
+            android:layout_marginBottom="6dp" />
+
+        <!-- Botón Cancelar -->
+        <Button
+            android:id="@+id/btnCancelarTransferencia"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:backgroundTint="@android:color/transparent"
+            android:text="CANCELAR"
+            android:textColor="#99FFFFFF"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+

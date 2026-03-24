@@ -27,13 +27,24 @@
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="191dp"
+        android:layout_height="87dp"
+        android:layout_below="@id/toolbarSuperior"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-15dp"
+        android:contentDescription="Sabores Unidos"
+        android:scaleType="fitCenter"
+        android:src="@drawable/saboresunidos" />
+
     <TextView
         android:id="@+id/titleMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/toolbarSuperior"
-        android:layout_marginTop="20dp"
+        android:layout_below="@id/imgLogo"
+        android:layout_marginTop="4dp"
         android:text="MENÚ"
         android:textColor="#FFFFFF"
         android:textSize="40sp"

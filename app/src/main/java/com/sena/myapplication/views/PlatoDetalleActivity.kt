@@ -18,10 +18,18 @@ import com.sena.myapplication.viewmodels.ViewModelPlatoDetalle
 /**
  * Pantalla de detalle de plato — Permite seleccionar tamaño, sabores y adiciones.
  *
- * Recibe los datos básicos del plato vía Intent extras (ID_PLATO, NOMBRE_PLATO, etc.).
- * Usa [ViewModelPlatoDetalle] para cargar los extras desde el servidor.
+ * Principio SRP: Solo gestiona la UI de configuración del plato.
+ * La carga de extras se delega a [ViewModelPlatoDetalle].
  *
- * Al pulsar "Añadir", navega al carrito con todos los datos seleccionados.
+ * Principio OCP: Hereda la barra de navegación de [BaseActivity].
+ * Si se añaden nuevos tipos de extras, se agregan nuevos observers
+ * sin modificar los existentes.
+ *
+ * Principio DIP: Depende de la abstracción [ViewModelPlatoDetalle],
+ * no de llamadas Retrofit directas.
+ *
+ * Recibe los datos básicos del plato vía Intent extras (ID_PLATO, NOMBRE_PLATO, etc.).
+ * Al pulsar "Añadir", valida la selección y navega al carrito.
  */
 class PlatoDetalleActivity : BaseActivity() {
 
@@ -104,6 +112,12 @@ class PlatoDetalleActivity : BaseActivity() {
         }
 
         binding.btnAnadir.setOnClickListener {
+            // Validar que se haya seleccionado un tamaño si hay tamaños disponibles
+            if (listaTamanos.isNotEmpty() && tamanoSeleccionado == null) {
+                Toast.makeText(this, "Selecciona un tamaño antes de añadir", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val tamanoNombre = if (listaTamanos.isNotEmpty())
                 binding.btnSeleccionarTamano.text.toString()
             else ""

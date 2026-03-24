@@ -13,6 +13,14 @@ import com.sena.myapplication.viewmodels.ViewModelPlato
 /**
  * Pantalla de platos por categoría — Lista los platos disponibles.
  *
+ * Principio SRP: Solo gestiona la UI de listado de platos.
+ * La carga de datos se delega a [ViewModelPlato].
+ *
+ * Principio DIP: Depende de la abstracción [ViewModelPlato],
+ * no de llamadas Retrofit directas.
+ *
+ * Principio OCP: Hereda la barra de navegación de [BaseActivity].
+ *
  * El usuario selecciona un plato para ver sus detalles (tamaño, sabor, adiciones).
  * Recibe ID_CATEGORIA y NOMBRE_CATEGORIA como extras del Intent.
  */

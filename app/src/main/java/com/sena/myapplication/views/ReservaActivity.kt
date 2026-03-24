@@ -5,28 +5,36 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
 import android.view.Window
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import com.sena.myapplication.R
 import com.sena.myapplication.databinding.ActivityReservaBinding
 import com.sena.myapplication.models.*
 import com.sena.myapplication.viewmodels.ViewModelReserva
+import java.text.NumberFormat
 import java.util.Calendar
+import java.util.Locale
 
 /**
  * Pantalla de reserva — El usuario selecciona fecha, hora, temática,
  * piso, método de pago y número de personas.
  *
- * Patrón MVVM: Toda la lógica de red (cargar temáticas, enviar reserva)
- * se delega a [ViewModelReserva]. La Activity solo gestiona la UI.
+ * Principio SRP: Solo gestiona la UI del formulario de reserva.
+ * Toda la lógica de red (cargar temáticas, enviar reserva) se delega
+ * a [ViewModelReserva].
+ *
+ * Principio OCP: Hereda [mostrarDialogoSelector], [codificarImagenBase64]
+ * y [obtenerNombreArchivo] de [BaseActivity] sin modificarlos.
+ *
+ * Principio DIP: Depende de la abstracción [ViewModelReserva],
+ * no de llamadas Retrofit directas.
  *
  * Recibe datos del cliente (CLI_*) y del carrito (CARRITO_*) para
  * construir el [ReservaRequest] completo.
@@ -47,6 +55,22 @@ class ReservaActivity : BaseActivity() {
     private var pisoPos = -1
     private var metodoPagoStr = ""
     private var metodoPos = -1
+
+    // Estado para el comprobante de transferencia
+    private var comprobanteUri: Uri? = null
+    private var dialogTransferenciaActivo: Dialog? = null
+
+    /** Launcher para seleccionar imagen del comprobante desde la galería */
+    private val selectorComprobante = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            comprobanteUri = it
+            // Actualizar texto en el diálogo activo (usa método heredado de BaseActivity)
+            dialogTransferenciaActivo?.findViewById<TextView>(R.id.tvNombreArchivo)?.text =
+                obtenerNombreArchivo(it)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,7 +130,7 @@ class ReservaActivity : BaseActivity() {
         // Disparar carga de temáticas
         viewModel.cargarTematicas()
 
-        // --- Listeners de selección ---
+        // --- Listeners de selección (usan mostrarDialogoSelector heredado de BaseActivity) ---
 
         binding.btnFecha.setOnClickListener {
             val manana = Calendar.getInstance()
@@ -192,8 +216,20 @@ class ReservaActivity : BaseActivity() {
                 ) else emptyList()
             )
 
-            // Delegar al ViewModel (coroutines con reintento)
-            viewModel.crearReserva(body)
+            // Si es transferencia, mostrar diálogo con datos bancarios
+            if (metodoPagoStr == "transferencia") {
+                val total = carritoPrecio * carritoCantidad
+                mostrarDialogoTransferencia(total) { comprobanteBase64 ->
+                    // Reconstruir body con comprobante incluido
+                    val bodyConComprobante = body.copy(
+                        reserva = body.reserva.copy(comprobantePago = comprobanteBase64)
+                    )
+                    viewModel.crearReserva(bodyConComprobante)
+                }
+            } else {
+                // Efectivo: enviar directo
+                viewModel.crearReserva(body)
+            }
         }
     }
 
@@ -237,81 +273,69 @@ class ReservaActivity : BaseActivity() {
         return true
     }
 
-    // ==================== DIÁLOGO SELECTOR GENÉRICO ====================
+    // ==================== DIÁLOGO TRANSFERENCIA ====================
 
     /**
-     * Muestra un diálogo personalizado con una lista de opciones y selección visual.
-     * Reutilizado por todos los selectores (bloque, piso, pago, temática).
+     * Muestra un diálogo personalizado con los datos bancarios para
+     * realizar la transferencia, similar a la versión web.
      *
-     * Principio DRY: Una sola función para todos los diálogos de selección.
+     * Incluye: datos de cuenta, advertencia, total, zona para adjuntar
+     * comprobante y botón de envío.
+     * Usa [codificarImagenBase64] y [obtenerNombreArchivo] heredados de [BaseActivity].
      *
-     * @param titulo Título del diálogo.
-     * @param opciones Lista de textos a mostrar.
-     * @param indiceActual Índice actualmente seleccionado (-1 si ninguno).
-     * @param alSeleccionar Lambda que recibe el índice y texto seleccionados.
+     * @param total Monto total a pagar.
+     * @param alConfirmar Lambda que se ejecuta cuando el usuario confirma el envío.
      */
-    private fun mostrarDialogoSelector(
-        titulo: String,
-        opciones: List<String>,
-        indiceActual: Int,
-        alSeleccionar: (Int, String) -> Unit
-    ) {
+    private fun mostrarDialogoTransferencia(total: Double, alConfirmar: (String) -> Unit) {
+        comprobanteUri = null // Resetear comprobante anterior
+
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.dialog_selector_generico)
+        dialog.setContentView(R.layout.dialog_transferencia)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setDimAmount(0.85f)
+        dialogTransferenciaActivo = dialog
 
-        dialog.findViewById<TextView>(R.id.tvTituloDialogo).text = titulo
-        val contenedor = dialog.findViewById<LinearLayout>(R.id.contenedorOpciones)
+        // Formatear el total con separador de miles
+        val formato = NumberFormat.getNumberInstance(Locale("es", "CO"))
+        formato.maximumFractionDigits = 0
+        val totalFormateado = formato.format(total)
 
-        // Si no hay selección previa, elegir el primer elemento por defecto
-        var indiceTemp = if (indiceActual == -1 && opciones.isNotEmpty()) 0 else indiceActual
-        val vistasFilas = mutableListOf<View>()
+        dialog.findViewById<TextView>(R.id.tvTotalPagar).text = "TOTAL A PAGAR: $ $totalFormateado"
 
-        for (i in opciones.indices) {
-            val vistaFila = LayoutInflater.from(this)
-                .inflate(R.layout.item_opcion_dialogo, contenedor, false)
-            val tvTexto  = vistaFila.findViewById<TextView>(R.id.tvTextoOpcion)
-            val imgCheck = vistaFila.findViewById<ImageButton>(R.id.imgCheckOpcion)
-
-            tvTexto.text = opciones[i]
-
-            // Estilo visual de selección
-            if (i == indiceTemp) {
-                imgCheck.setImageResource(R.drawable.ic_radio_seleccionado)
-                tvTexto.setTextColor(Color.parseColor("#FFFFFF"))
-            } else {
-                imgCheck.setImageResource(R.drawable.ic_radio_vacio)
-                tvTexto.setTextColor(Color.parseColor("#99FFFFFF"))
-            }
-
-            vistaFila.setOnClickListener {
-                indiceTemp = i
-                vistasFilas.forEachIndexed { index, vista ->
-                    val img = vista.findViewById<ImageButton>(R.id.imgCheckOpcion)
-                    val txt = vista.findViewById<TextView>(R.id.tvTextoOpcion)
-
-                    if (index == indiceTemp) {
-                        img.setImageResource(R.drawable.ic_radio_seleccionado)
-                        txt.setTextColor(Color.parseColor("#FFFFFF"))
-                    } else {
-                        img.setImageResource(R.drawable.ic_radio_vacio)
-                        txt.setTextColor(Color.parseColor("#99FFFFFF"))
-                    }
-                }
-            }
-
-            contenedor.addView(vistaFila)
-            vistasFilas.add(vistaFila)
+        // Zona para seleccionar comprobante
+        dialog.findViewById<LinearLayout>(R.id.layoutSeleccionarComprobante).setOnClickListener {
+            selectorComprobante.launch("image/*")
         }
 
-        dialog.findViewById<Button>(R.id.btnCancelarDialogo).setOnClickListener { dialog.dismiss() }
-        dialog.findViewById<Button>(R.id.btnAceptarDialogo).setOnClickListener {
-            if (indiceTemp != -1) alSeleccionar(indiceTemp, opciones[indiceTemp])
+        // Botón enviar comprobante → codificar imagen y confirmar
+        dialog.findViewById<Button>(R.id.btnEnviarComprobante).setOnClickListener {
+            val uri = comprobanteUri
+            if (uri == null) {
+                Toast.makeText(this, "Selecciona un comprobante de pago", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            // Codificar imagen a base64 (método heredado de BaseActivity)
+            val base64 = codificarImagenBase64(uri)
+            if (base64 == null) {
+                Toast.makeText(this, "Error al procesar la imagen", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             dialog.dismiss()
+            dialogTransferenciaActivo = null
+            alConfirmar(base64)
         }
+
+        // Botón cancelar
+        dialog.findViewById<Button>(R.id.btnCancelarTransferencia).setOnClickListener {
+            dialog.dismiss()
+            dialogTransferenciaActivo = null
+        }
+
+        dialog.setOnDismissListener { dialogTransferenciaActivo = null }
         dialog.show()
     }
+
 
     companion object {
         /** Número máximo de personas permitido por reserva. */

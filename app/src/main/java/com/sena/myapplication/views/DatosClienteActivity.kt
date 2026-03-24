@@ -9,11 +9,18 @@ import com.sena.myapplication.databinding.ActivityDatosClienteBinding
  * Pantalla de datos del cliente — Formulario para recopilar nombre,
  * cédula, correo y teléfono antes de continuar con la reserva o domicilio.
  *
+ * Principio SRP: Solo gestiona la recopilación y validación de datos
+ * del cliente. No realiza llamadas de red.
+ *
+ * Principio OCP: Hereda la barra de navegación de [BaseActivity].
+ * Las validaciones se encapsulan en [validarCamposObligatorios] para
+ * facilitar su extensión sin modificar el flujo principal.
+ *
  * Recibe datos del carrito (prefijo CARRITO_*) y un flag FLUJO_DOMICILIO
  * que determina si el siguiente paso es ReservaActivity o DomicilioActivity.
  *
- * Implementa validaciones de campos vacíos, formato de correo
- * y aceptación obligatoria del checkbox de Habeas Data.
+ * Implementa validaciones de campos vacíos, formato numérico,
+ * formato de correo y aceptación obligatoria del checkbox de Habeas Data.
  */
 class DatosClienteActivity : BaseActivity() {
 
@@ -84,7 +91,11 @@ class DatosClienteActivity : BaseActivity() {
 
     /**
      * Valida todos los campos del formulario de datos del cliente.
-     * Verifica campos vacíos, longitud mínima/máxima y formatos.
+     * Verifica campos vacíos, longitud mínima/máxima, formato numérico
+     * y formato de caracteres permitidos.
+     *
+     * Principio SRP: Concentra todas las reglas de validación del formulario
+     * en un solo método, facilitando su mantenimiento.
      *
      * @return true si todo es válido, false si hay algún error.
      */
@@ -100,30 +111,46 @@ class DatosClienteActivity : BaseActivity() {
             Toast.makeText(this, "El nombre debe tener al menos 3 caracteres", Toast.LENGTH_SHORT).show()
             return false
         }
+        if (nombre.length > 50) {
+            Toast.makeText(this, "El nombre no puede superar los 50 caracteres", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if (!nombre.all { it.isLetter() || it.isWhitespace() }) {
+            Toast.makeText(this, "El nombre solo puede contener letras y espacios", Toast.LENGTH_SHORT).show()
+            return false
+        }
 
         // --- Cédula: 6–10 dígitos numéricos ---
         if (cedula.isEmpty()) {
             Toast.makeText(this, "Ingresa tu cédula", Toast.LENGTH_SHORT).show()
             return false
         }
-        if (cedula.length < 6) {
-            Toast.makeText(this, "La cédula debe tener al menos 6 dígitos", Toast.LENGTH_SHORT).show()
+        if (!cedula.all { it.isDigit() }) {
+            Toast.makeText(this, "La cédula solo puede contener números", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if (cedula.length < 6 || cedula.length > 10) {
+            Toast.makeText(this, "La cédula debe tener entre 6 y 10 dígitos", Toast.LENGTH_SHORT).show()
             return false
         }
 
-        // --- Correo: no vacío (formato se valida aparte) ---
+        // --- Correo: no vacío (formato se valida aparte con Patterns) ---
         if (correo.isEmpty()) {
             Toast.makeText(this, "Ingresa tu correo", Toast.LENGTH_SHORT).show()
             return false
         }
 
-        // --- Teléfono: exactamente 10 dígitos ---
+        // --- Teléfono: exactamente 10 dígitos numéricos ---
         if (telefono.isEmpty()) {
             Toast.makeText(this, "Ingresa tu teléfono", Toast.LENGTH_SHORT).show()
             return false
         }
+        if (!telefono.all { it.isDigit() }) {
+            Toast.makeText(this, "El teléfono solo puede contener números", Toast.LENGTH_SHORT).show()
+            return false
+        }
         if (telefono.length != 10) {
-            Toast.makeText(this, "El teléfono debe tener 10 dígitos", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "El teléfono debe tener exactamente 10 dígitos", Toast.LENGTH_SHORT).show()
             return false
         }
 

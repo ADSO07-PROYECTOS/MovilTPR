@@ -16,8 +16,14 @@ import com.sena.myapplication.viewmodels.ViewModelCategoria
  * Punto de entrada de la app (launcher). El usuario selecciona una
  * categoría para ver los platos disponibles.
  *
- * Patrón MVVM: La Activity solo observa el LiveData del ViewModel
+ * Principio SRP: La Activity solo observa el LiveData del ViewModel
  * y actualiza la UI. No contiene lógica de negocio ni llamadas de red.
+ *
+ * Principio DIP: Depende de la abstracción [ViewModelCategoria],
+ * no de llamadas Retrofit directas.
+ *
+ * Principio OCP: Hereda la barra de navegación de [BaseActivity]
+ * sin modificarla.
  */
 class MainActivity : BaseActivity() {
 

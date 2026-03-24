@@ -26,12 +26,13 @@ data class ClienteReserva(
 
 /** Datos específicos de la reserva (fecha, hora, piso, etc.). */
 data class DatosReserva(
-    @SerializedName("fec")         val fec: String,
-    @SerializedName("hor")         val hor: String,
-    @SerializedName("tematica")    val tematica: Int,
-    @SerializedName("personas")    val personas: Int,
-    @SerializedName("piso")        val piso: Int,
-    @SerializedName("metodo_pago") val metodoPago: String
+    @SerializedName("fec")              val fec: String,
+    @SerializedName("hor")              val hor: String,
+    @SerializedName("tematica")         val tematica: Int,
+    @SerializedName("personas")         val personas: Int,
+    @SerializedName("piso")             val piso: Int,
+    @SerializedName("metodo_pago")      val metodoPago: String,
+    @SerializedName("comprobante_pago") val comprobantePago: String? = null
 )
 
 /** Item individual del pedido asociado a la reserva. */
