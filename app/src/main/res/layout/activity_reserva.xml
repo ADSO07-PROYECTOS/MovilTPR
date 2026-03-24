@@ -47,25 +47,32 @@
                     android:textColor="#FFFFFF"
                     android:textSize="13sp"
                     android:layout_marginBottom="4dp" />
-                <com.google.android.material.textfield.TextInputLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    app:boxStrokeColor="@color/text_input_stroke_color"
-                    app:hintTextColor="@color/rojo_primario"
-                    app:boxBackgroundColor="#33FFFFFF">
-                  <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnFecha"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginEnd="5dp"
-                    android:text="FECHA"
-                    android:textAllCaps="true"
-                    android:background="@drawable/borde_spinner_oscuro"
-                    android:textColorHint="#FFFFFF"
-                    android:textSize="13sp"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageButton
+                        android:id="@+id/btnFecha"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:background="@drawable/borde_spinner_oscuro"
+                        android:src="@drawable/ic_calendario"
+                        android:scaleType="centerInside"
+                        android:contentDescription="Seleccionar fecha"
+                        android:padding="12dp" />
+
+                    <TextView
+                        android:id="@+id/tvFechaSeleccionada"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:textColor="#CCFFFFFF"
+                        android:textSize="14sp"
+                        android:text="Sin fecha seleccionada" />
+                </LinearLayout>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

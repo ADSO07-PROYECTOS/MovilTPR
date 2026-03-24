@@ -123,7 +123,7 @@ class ReservaActivity : BaseActivity() {
                     val mes = String.format("%02d", m + 1)
                     val dia = String.format("%02d", d)
                     fechaSeleccionada = "$y-$mes-$dia"
-                    binding.btnFecha.text = fechaSeleccionada
+                    binding.tvFechaSeleccionada.text = fechaSeleccionada
                 }, manana.get(Calendar.YEAR), manana.get(Calendar.MONTH), manana.get(Calendar.DAY_OF_MONTH)
             )
             picker.datePicker.minDate = manana.timeInMillis

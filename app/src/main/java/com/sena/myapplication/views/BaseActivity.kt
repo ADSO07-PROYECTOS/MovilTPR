@@ -90,7 +90,7 @@ open class BaseActivity : AppCompatActivity() {
                 tvTexto.setTextColor(Color.parseColor("#FFFFFF"))
             } else {
                 imgCheck.setImageResource(R.drawable.ic_radio_vacio)
-                tvTexto.setTextColor(Color.parseColor("#99FFFFFF"))
+                tvTexto.setTextColor(Color.parseColor("#CCF5F5F5"))
             }
 
             vistaFila.setOnClickListener {
@@ -104,7 +104,7 @@ open class BaseActivity : AppCompatActivity() {
                         txt.setTextColor(Color.parseColor("#FFFFFF"))
                     } else {
                         img.setImageResource(R.drawable.ic_radio_vacio)
-                        txt.setTextColor(Color.parseColor("#99FFFFFF"))
+                        txt.setTextColor(Color.parseColor("#CCF5F5F5"))
                     }
                 }
             }
