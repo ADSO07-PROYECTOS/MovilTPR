@@ -47,32 +47,19 @@
                     android:textColor="#FFFFFF"
                     android:textSize="13sp"
                     android:layout_marginBottom="4dp" />
-                <LinearLayout
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnFecha"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_marginBottom="16dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <ImageButton
-                        android:id="@+id/btnFecha"
-                        android:layout_width="55dp"
-                        android:layout_height="55dp"
-                        android:background="@drawable/borde_spinner_oscuro"
-                        android:src="@drawable/ic_calendario"
-                        android:scaleType="centerInside"
-                        android:contentDescription="Seleccionar fecha"
-                        android:padding="12dp" />
-
-                    <TextView
-                        android:id="@+id/tvFechaSeleccionada"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:textColor="#CCFFFFFF"
-                        android:textSize="14sp"
-                        android:text="Sin fecha seleccionada" />
-                </LinearLayout>
+                    android:background="@drawable/borde_spinner_oscuro"
+                    android:textColor="#FFFFFF"
+                    android:text="Seleccionar Fecha"
+                    android:gravity="center_vertical|start"
+                    android:paddingHorizontal="15dp"
+                    android:textAllCaps="false"
+                    android:drawableStart="@drawable/ic_calendario"
+                    android:drawablePadding="10dp" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -94,7 +81,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Tematica"
+                    android:text="Temática"
                     android:textColor="#FFFFFF"
                     android:textSize="13sp"
                     android:layout_marginBottom="4dp" />
@@ -105,7 +92,7 @@
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/borde_spinner_oscuro"
                 android:textColor="#FFFFFF"
-                android:text="Cargando tematicas..."
+                android:text="Cargando temáticas..."
                 android:gravity="center_vertical|start"
                 android:paddingHorizontal="15dp"
                 android:textAllCaps="false"
@@ -156,7 +143,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Metodo de pago"
+                    android:text="Método de pago"
                     android:textColor="#FFFFFF"
                     android:textSize="13sp"
                     android:layout_marginBottom="4dp" />
@@ -167,7 +154,7 @@
                   android:layout_marginBottom="24dp"
                   android:background="@drawable/borde_spinner_oscuro"
                   android:textColor="#FFFFFF"
-                  android:text="Seleccionar Metodo"
+                  android:text="Seleccionar Método"
                   android:gravity="center_vertical|start"
                   android:paddingHorizontal="15dp"
                   android:textAllCaps="false"/>

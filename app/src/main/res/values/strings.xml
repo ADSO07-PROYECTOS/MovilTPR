@@ -2,7 +2,7 @@
     <string name="app_name">Sabores Unidos</string>
     <string name="menu_title">MENÚ</string>
     <string name="pizza_name">PIZZA NAPOLITANA</string>
-    <string name="pizza_description">SALSA NAPOLITANA,\nQUESO, MOZARELLA, TOMATE EN\nRODAJAS Y OREGANO</string>
+    <string name="pizza_description">SALSA NAPOLITANA,\nQUESO, MOZZARELLA, TOMATE EN\nRODAJAS Y ORÉGANO</string>
     <string name="size_button">TAMAÑO</string>
     <string name="price_button">SABOR</string>
     <string name="ask_additions">¿DESEAS ADICIONAR ALGO A TU COMIDA?</string>
@@ -12,7 +12,7 @@
     <string name="seleccionar_tamano">Seleccionar tamaño</string>
     <string name="precio_cero">$ 0</string>
     <string name="carrito_titulo">RESUMEN DE TU CARRITO</string>
-    <string name="carrito_metodo_pago">METODO DE PAGO</string>
+    <string name="carrito_metodo_pago">MÉTODO DE PAGO</string>
     <string name="carrito_efectivo">PAGO EN EFECTIVO</string>
     <string name="carrito_el_total">EL TOTAL ES:</string>
     <string name="carrito_total">TOTAL: %1$s</string>
@@ -22,7 +22,7 @@
     <string name="price_placeholder">$XXXXXX</string>
     <string name="chip_tamano_label">%1$s  $%2$d</string>
     <string name="precio_total_label">$ %1$d</string>
-    <string name="adicional_nombre">JAMON</string>
+    <string name="adicional_nombre">JAMÓN</string>
     <string name="adicional_cantidad">0</string>
     <string name="adicional_precio">$8000</string>
     <string name="btn_menos_desc">Disminuir cantidad</string>
