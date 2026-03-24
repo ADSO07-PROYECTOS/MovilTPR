@@ -150,17 +150,18 @@
                         android:textStyle="bold"
                         app:cornerRadius="25dp" />
 
-                    <Button
-                        android:id="@+id/btnConfirmarPedido"
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="#A51D21"
-                        android:text="CONFIRMAR PEDIDO"
-                        android:textColor="#FFFFFF"
-                        android:textStyle="bold"
-                        app:cornerRadius="25dp" />
+                  <Button
+                    android:id="@+id/btnConfirmarPedido"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:backgroundTint="#A51D21"
+                    android:text="CONFIRMAR PEDIDO"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    app:cornerRadius="25dp" />
 
                 </LinearLayout>
 

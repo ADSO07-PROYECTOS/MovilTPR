@@ -15,68 +15,47 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.sena.myapplication.R
+import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 
-/**
- * Clase base para todas las Activities de la aplicación.
- *
- * Principio OCP (Open/Closed): Las Activities hijas extienden esta clase
- * para heredar la barra de navegación y utilidades compartidas sin modificarla.
- *
- * Principio DRY: Centraliza la lógica de navegación inferior, el diálogo
- * selector genérico y utilidades de archivos/imágenes que comparten
- * múltiples pantallas (ReservaActivity, DomicilioActivity, MisReservasActivity).
- *
- * Uso: Llamar a [configurarBarraNavegacion] después de [setContentView].
- */
 open class BaseActivity : AppCompatActivity() {
 
-    /**
-     * Vincula los botones de la barra de navegación inferior y define
-     * su comportamiento. Debe llamarse después de [setContentView].
-     *
-     * Si algún botón no existe en el layout actual, la función
-     * retorna sin error (protección con safe-call ?:).
-     */
+
     protected fun configurarBarraNavegacion() {
-        val btnCasa         = findViewById<ImageButton?>(R.id.btnCasa)         ?: return
-        val btnCarrito      = findViewById<ImageButton?>(R.id.btnCarrito)      ?: return
-        val btnNotificacion = findViewById<ImageButton?>(R.id.btnNotification) ?: return
+      val btnCasa         = findViewById<ImageButton?>(R.id.btnCasa)         ?: return
+      val btnCarrito      = findViewById<ImageButton?>(R.id.btnCarrito)      ?: return
+      val btnNotificacion = findViewById<ImageButton?>(R.id.btnNotification) ?: return
 
-        // Botón Casa → Volver a MainActivity limpiando la pila
-        btnCasa.setOnClickListener {
-            startActivity(
-                Intent(this, MainActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                }
-            )
-        }
+      val barraInferior = findViewById<View>(R.id.barraInferior)
+      if (barraInferior != null) {
+        ViewCompat.setOnApplyWindowInsetsListener(barraInferior) { view, insets ->
+          val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
 
-        // Botón Carrito → Abrir CarritoActivity
-        btnCarrito.setOnClickListener {
-            startActivity(Intent(this, CarritoActivity::class.java))
-        }
+          val params = view.layoutParams as ViewGroup.MarginLayoutParams
+          params.bottomMargin = systemBars.bottom
+          view.layoutParams = params
 
-        // Botón Mis Reservas → Abrir MisReservasActivity
-        btnNotificacion.setOnClickListener {
-            startActivity(Intent(this, MisReservasActivity::class.java))
+          insets
         }
+      }
+      // -----------------------------------------------------------
+
+      btnCasa.setOnClickListener {
+        startActivity(
+          Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+          }
+        )
+      }
+
+      btnCarrito.setOnClickListener {
+        startActivity(Intent(this, CarritoActivity::class.java))
+      }
+
+      btnNotificacion.setOnClickListener { /* Pendiente: pantalla de reservas */ }
     }
 
-    // ==================== DIÁLOGO SELECTOR GENÉRICO ====================
-
-    /**
-     * Muestra un diálogo personalizado con una lista de opciones y selección visual.
-     * Reutilizado por todos los selectores (bloque horario, piso, método de pago,
-     * temática) en múltiples Activities.
-     *
-     * Principio DRY: Una sola implementación para todos los diálogos de selección
-     * en la aplicación, evitando duplicación en Activities hijas.
-     *
-     * @param titulo Título del diálogo.
-     * @param opciones Lista de textos a mostrar como opciones.
-     * @param indiceActual Índice actualmente seleccionado (-1 si ninguno).
-     * @param alSeleccionar Lambda que recibe el índice y texto seleccionados.
-     */
     protected fun mostrarDialogoSelector(
         titulo: String,
         opciones: List<String>,
