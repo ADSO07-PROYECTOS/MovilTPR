@@ -37,7 +37,6 @@ class DomicilioActivity : BaseActivity() {
     private var comprobanteUri: Uri? = null
     private var dialogTransferenciaActivo: Dialog? = null
 
-    /** Launcher para seleccionar imagen del comprobante desde la galería */
     private val selectorComprobante = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -95,7 +94,7 @@ class DomicilioActivity : BaseActivity() {
         // --- Listeners ---
         binding.btnVolverDomicilio.setOnClickListener { finish() }
 
-        // Selector de método de pago (usa mostrarDialogoSelector heredado de BaseActivity)
+        // Selector de metodo de pago (usa mostrarDialogoSelector heredado de BaseActivity)
         binding.btnMetodoPago.setOnClickListener {
             mostrarDialogoSelector("Método de Pago", opcionesMetodoPago, metodoPagoPos) { pos, texto ->
                 metodoPagoPos = pos
@@ -158,11 +157,7 @@ class DomicilioActivity : BaseActivity() {
 
     // ==================== VALIDACIONES ====================
 
-    /**
-     * Valida que los campos obligatorios del formulario de envío estén completos.
-     *
-     * @return true si todo es válido, false si falta algún campo.
-     */
+
     private fun validarFormularioEnvio(direccion: String, barrio: String): Boolean {
         if (direccion.isEmpty()) {
             Toast.makeText(this, "Ingresa la dirección completa", Toast.LENGTH_SHORT).show()

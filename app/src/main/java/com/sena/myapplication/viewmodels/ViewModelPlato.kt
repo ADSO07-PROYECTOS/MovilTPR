@@ -23,13 +23,8 @@ class ViewModelPlato : ViewModel() {
     private val _cargando = MutableLiveData<Boolean>()
     val cargando: LiveData<Boolean> get() = _cargando
 
-    /** ID de la última categoría cargada para evitar recarga innecesaria. */
     private var ultimaCategoriaId: Int = -1
 
-    /**
-     * Obtiene los platos de la categoría indicada.
-     * Si ya se cargaron los platos de esta categoría, no vuelve a llamar al API.
-     */
     fun obtenerPlatosPorCategoria(idCategoria: Int) {
         if (idCategoria == ultimaCategoriaId && _platos.value != null) return
         ultimaCategoriaId = idCategoria

@@ -2,9 +2,6 @@ package com.sena.myapplication.models
 
 import com.google.gson.annotations.SerializedName
 
-// ==================================================================
-// Modelos de SOLICITUD (Request) — POST /api/reservas
-// ==================================================================
 
 data class ReservaRequest(
     @SerializedName("cliente") val cliente: ClienteReserva,
@@ -19,7 +16,6 @@ data class ClienteReserva(
     @SerializedName("tel")    val tel: String
 )
 
-/** Datos específicos de la reserva (fecha, hora, piso, etc.). */
 data class DatosReserva(
     @SerializedName("fec")              val fec: String,
     @SerializedName("hor")              val hor: String,
@@ -36,9 +32,6 @@ data class PedidoItem(
     @SerializedName("precio")   val precio: Double
 )
 
-// ==================================================================
-// Modelo de RESPUESTA (Response)
-// ==================================================================
 
 data class ReservaResponse(
     @SerializedName("status")  val status: String?,

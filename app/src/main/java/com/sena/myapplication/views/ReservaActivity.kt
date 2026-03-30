@@ -281,7 +281,7 @@ class ReservaActivity : BaseActivity() {
                 Toast.makeText(this, "Selecciona un comprobante de pago", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            // Codificar imagen a base64 (método heredado de BaseActivity)
+            // Codificar imagen a base64 (metodo heredado de BaseActivity)
             val base64 = codificarImagenBase64(uri)
             if (base64 == null) {
                 Toast.makeText(this, "Error al procesar la imagen", Toast.LENGTH_SHORT).show()
