@@ -31,9 +31,9 @@ interface ConexionServiceMenu {
 
     companion object {
 
-        const val BASE_URL = "http://147.182.238.195:5001/"
+        const val BASE_URL = "http://54.156.114.70:62001//"
 
-        const val BASE_URL_IMAGENES = "http://147.182.238.195:5000/static/img/"
+        const val BASE_URL_IMAGENES = "http://54.156.114.70:62001/static/img/"
 
         private val loggingInterceptor = Interceptor { chain ->
             val request = chain.request()

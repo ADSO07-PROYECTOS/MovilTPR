@@ -43,13 +43,11 @@ class ReservaActivity : BaseActivity() {
     private var comprobanteUri: Uri? = null
     private var dialogTransferenciaActivo: Dialog? = null
 
-    /** Launcher para seleccionar imagen del comprobante desde la galería */
     private val selectorComprobante = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let {
             comprobanteUri = it
-            // Actualizar texto en el diálogo activo (usa método heredado de BaseActivity)
             dialogTransferenciaActivo?.findViewById<TextView>(R.id.tvNombreArchivo)?.text =
                 obtenerNombreArchivo(it)
         }
@@ -73,7 +71,7 @@ class ReservaActivity : BaseActivity() {
         val carritoPrecio   = intent.getDoubleExtra("CARRITO_PRECIO_UNITARIO", 0.0)
 
         // --- Opciones de selección ---
-        val opcionesBloque = (6..22).map { "$it:00" }
+        val opcionesBloque = (4..22).map { "$it:00" }
         val opcionesPiso   = listOf("Piso 1", "Piso 2")
         val opcionesMetodo = listOf("Efectivo", "Transferencia")
 
@@ -218,12 +216,7 @@ class ReservaActivity : BaseActivity() {
 
     // ==================== VALIDACIONES ====================
 
-    /**
-     * Valida que todos los campos del formulario de reserva estén completos.
-     * Muestra un Toast para el primer campo faltante.
-     *
-     * @return true si todo es válido, false si hay campos vacíos.
-     */
+
     private fun validarFormularioReserva(personas: Int): Boolean {
         if (fechaSeleccionada.isEmpty()) {
             Toast.makeText(this, "Selecciona una fecha", Toast.LENGTH_SHORT).show()

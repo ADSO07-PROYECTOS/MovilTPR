@@ -82,11 +82,15 @@ class PlatoDetalleActivity : BaseActivity() {
             }
         }
 
-        binding.btnMas.setOnClickListener {
-            cantidad++
-            binding.tvCantidad.text = cantidad.toString()
-            actualizarPrecioTotal()
+      binding.btnMas.setOnClickListener {
+        if (cantidad < 12) {
+          cantidad++
+          binding.tvCantidad.text = cantidad.toString()
+          actualizarPrecioTotal()
+        } else {
+          Toast.makeText(this, "Solo puedes pedir hasta 12 platos iguales", Toast.LENGTH_SHORT).show()
         }
+      }
 
         binding.btnSeleccionarTamano.setOnClickListener {
             if (listaTamanos.isEmpty()) {
@@ -227,12 +231,16 @@ class PlatoDetalleActivity : BaseActivity() {
                         actualizarPrecioTotal()
                     }
                 }
-                item.findViewById<MaterialButton>(R.id.btnMasAdicion).setOnClickListener {
-                    cantidadAdicion++
-                    precioAdicionesTotal += adicion.precio
-                    tvCantidad.text = cantidadAdicion.toString()
-                    actualizarPrecioTotal()
+              item.findViewById<MaterialButton>(R.id.btnMasAdicion).setOnClickListener {
+                if (cantidadAdicion < 12) {
+                  cantidadAdicion++
+                  precioAdicionesTotal += adicion.precio
+                  tvCantidad.text = cantidadAdicion.toString()
+                  actualizarPrecioTotal()
+                } else {
+                  Toast.makeText(this@PlatoDetalleActivity, "El límite máximo es de 12 porciones", Toast.LENGTH_SHORT).show()
                 }
+              }
 
                 binding.layoutAdiciones.addView(item)
             }

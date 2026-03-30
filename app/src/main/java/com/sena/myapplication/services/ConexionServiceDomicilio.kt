@@ -21,7 +21,7 @@ interface ConexionServiceDomicilio {
 
     companion object {
 
-        const val BASE_URL = "http://147.182.238.195:5004/"
+        const val BASE_URL = "http://54.156.114.70:62001/"
         private val loggingInterceptor = Interceptor { chain ->
             val request = chain.request()
             val bodyStr = request.body()?.let { body ->

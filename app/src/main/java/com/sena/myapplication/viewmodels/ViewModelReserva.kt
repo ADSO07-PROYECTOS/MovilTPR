@@ -35,7 +35,6 @@ class ViewModelReserva : ViewModel() {
     // Cargar temáticas
     // ------------------------------------------------------------------
 
-    /** Solicita la lista de temáticas con reintentos automáticos. */
     fun cargarTematicas() {
         cargarTematicasConReintento(intentos = 0)
     }
