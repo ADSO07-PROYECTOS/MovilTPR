@@ -28,6 +28,7 @@
             android:exported="false" />
         <activity
             android:name=".views.DatosClienteActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".views.ReservaActivity"
